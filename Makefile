@@ -6,7 +6,7 @@
 #    By: drabarza <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/11 15:25:07 by drabarza          #+#    #+#              #
-#    Updated: 2025/09/11 18:10:58 by drabarza         ###   ########.fr        #
+#    Updated: 2025/09/12 14:59:12 by drabarza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ NC := \033[0m
 NAME := ircserv
 CPP := c++
 FLAGS := -Wall -Werror -Wextra -std=c++98
-SRC :=	src/main\
+SRC :=	src/main.cpp\
 		src/Client.cpp\
 		src/Server.cpp
 OBJ := $(SRC:.cpp=.o)
