@@ -6,7 +6,7 @@
 /*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/12 18:53:11 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/12 20:30:27 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,7 @@ class Server
 
 		static void signalHandler(int signum);
 		void closeFds();
+
+		void newClient();
+		void newData(int fd);
 };

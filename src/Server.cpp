@@ -6,7 +6,7 @@
 /*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/12 19:08:38 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/12 20:30:35 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,16 @@ void Server::closeFds()
 	}
 }
 
+void	Server::newClient()
+{
+	
+}
+
+void	Server::newData(int fd)
+{
+	
+}
+
 void Server::serverInit()
 {
 	setupSocket();
@@ -81,7 +91,18 @@ void Server::serverInit()
 	std::cout << "Waiting for a new connection !!!" << std::endl;
 	while(_signal != true)
 	{
-		continue;
+		if ((poll(&_fds[0], _fds.size(), -1) == -1) && (_signal != true))
+			throw std::runtime_error("Error  poll");
+		for (size_t i = 0; i < _fds.size(); i++)
+		{
+			if (_fds[i].revents & POLLIN)
+			{
+				if (_fds[i].fd == _serverSocketFd)
+					newClient();
+				else
+					newData(_fds[i].fd);
+			}
+		}
 	}
 	closeFds();
 }
