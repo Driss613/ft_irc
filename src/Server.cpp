@@ -6,7 +6,7 @@
 /*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/12 20:30:35 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/13 18:37:53 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,85 @@ void Server::closeFds()
 {
 	for (size_t i = 0; i < _clients.size(); i++)
 	{
-		std::cout << "Client" << _clients[i].getFd() << "disconnected." << std::endl;
+		std::cout << "Client " << _clients[i].getFd() << " disconnected." << std::endl;
 		close(_clients[i].getFd());
 	}
 	if (_serverSocketFd != -1)
 	{
-		std::cout << "Server" << _serverSocketFd << "disconnected." << std::endl;
+		std::cout << "Server " << _serverSocketFd << " disconnected." << std::endl;
 		close(_serverSocketFd);
 	}
 }
 
 void	Server::newClient()
 {
-	
+	Client				newClient;
+	struct sockaddr_in	clientAdd;
+	struct pollfd		newPollFd;
+	int					clientSocket;
+	socklen_t			len;
+
+	len = sizeof(clientAdd);
+	clientSocket = accept(_serverSocketFd, (struct sockaddr*)&clientAdd, &len);
+	if (clientSocket == -1)
+	{
+		throw std::runtime_error("Error : Accept");
+		return ;
+	}
+	if (fcntl(clientSocket, F_SETFL, O_NONBLOCK) == -1)
+	{
+		throw std::runtime_error("Error : fcntl");
+		return ;
+	}
+	newPollFd.fd = clientSocket;
+	newPollFd.events = POLLIN;
+	newPollFd.revents = 0;
+	newClient.setFd(clientSocket);
+	newClient.setIp(inet_ntoa((clientAdd.sin_addr)));
+	_clients.push_back(newClient);
+	_fds.push_back(newPollFd);
+	std::cout << "Client " << clientSocket << " connected." << std::endl;
+}
+
+void	Server::removeClient(int fd)
+{
+	for (size_t i = 0; i < _fds.size(); i++)
+	{
+		if (_fds[i].fd == fd)
+		{
+			_fds.erase(_fds.begin() + i);
+			break ;
+		}
+	}
+	for (size_t i = 0; i < _clients.size(); i++)
+	{
+		if (_clients[i].getFd() == fd)
+		{
+			_clients.erase(_clients.begin() + i);
+			break ;
+		}
+	}
 }
 
 void	Server::newData(int fd)
 {
-	
+	char	buffer[1024];	// 
+	int		bytes;
+
+	memset(buffer, '\0', sizeof(buffer));
+	bytes = recv(fd, buffer, sizeof(buffer) - 1, 0);
+	if (bytes <= 0)
+	{
+		std::cout << "Client " << fd << " disconnected" << std::endl;
+		removeClient(fd);
+		close(fd);
+	}
+	else
+	{
+		buffer[bytes] = '\0';
+		std::cout << "Client " << fd << " Data : " << buffer;
+	}
+	(void)fd;
 }
 
 void Server::serverInit()

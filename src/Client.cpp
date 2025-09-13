@@ -6,13 +6,13 @@
 /*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/11 16:18:03 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/13 14:16:08 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Client.hpp"
 
-Client::Client(const std::string& ip, const int fd) : _ip(ip), _fd(fd)
+Client::Client() : _ip(""), _fd(-1)
 {}
 
 Client::Client(const Client& cpy) : _ip(cpy._ip), _fd(cpy._fd)
@@ -32,4 +32,14 @@ const std::string&	Client::getIp(void) const
 int	Client::getFd(void) const
 {
 	return _fd;
+}
+
+void	Client::setIp(const std::string& ip)
+{
+	_ip = ip;
+}
+
+void	Client::setFd(int fd)
+{
+	_fd = fd;
 }

@@ -6,13 +6,13 @@
 /*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/12 20:30:27 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/13 17:57:52 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <vector>
 #include <csignal>
@@ -20,6 +20,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h> //sockaddr_in
 #include <fcntl.h>
+#include <arpa/inet.h> //inet_ntoa
 
 #include "Client.hpp"
 
@@ -36,12 +37,13 @@ class Server
 		Server(const Server& cpy);
 		~Server();
 		//Server& operator=(const Server& rhs);
-		void serverInit();
-		void setupSocket();
+		void serverInit(void);
+		void setupSocket(void);
 
 		static void signalHandler(int signum);
-		void closeFds();
+		void closeFds(void);
+		void removeClient(int fd);
 
-		void newClient();
+		void newClient(void);
 		void newData(int fd);
 };

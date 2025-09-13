@@ -6,7 +6,7 @@
 /*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/11 16:20:47 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/13 14:16:15 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@
 class Client
 {
 	private :
-		const std::string _ip;
-		const int _fd;
+		std::string _ip;
+		int _fd;
 	public :
-		Client(const std::string& ip, const int fd);
+		Client();
 		Client(const Client& cpy);
 		~Client();
 		//Client& operator=(const Client& rhs);
 		const std::string&	getIp(void) const;
-		int			getFd(void) const;
+		int					getFd(void) const;
+		void				setIp(const std::string& ip);
+		void				setFd(int fd);
 };
