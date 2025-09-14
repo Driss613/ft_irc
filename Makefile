@@ -6,7 +6,7 @@
 #    By: drabarza <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/11 15:25:07 by drabarza          #+#    #+#              #
-#    Updated: 2025/09/14 11:16:38 by drabarza         ###   ########.fr        #
+#    Updated: 2025/09/14 11:34:08 by drabarza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ $(BUILD)/%.o : src/%.cpp
 	@echo "${CURRENT_DATE} ${GREENS}[CMD]${NC}${GREEN} - $(basename $<)${NC}"
 
 clean:
-	@echo "${RED}Cleaning object and dep files files...${NC}"
+	@echo "${RED}Cleaning object and dep files...${NC}"
 	@rm -rf ${BUILD}
 	@echo "${RED}Cleaning completed.${NC}"
 
