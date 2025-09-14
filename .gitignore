@@ -1,3 +1,5 @@
-src/*.o
+.build/
 ircserv
+*.o
+*.d
 .vscode/

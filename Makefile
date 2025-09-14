@@ -6,7 +6,7 @@
 #    By: drabarza <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/11 15:25:07 by drabarza          #+#    #+#              #
-#    Updated: 2025/09/12 14:59:12 by drabarza         ###   ########.fr        #
+#    Updated: 2025/09/14 11:16:38 by drabarza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,9 @@ FLAGS := -Wall -Werror -Wextra -std=c++98
 SRC :=	src/main.cpp\
 		src/Client.cpp\
 		src/Server.cpp
-OBJ := $(SRC:.cpp=.o)
+BUILD := .build
+OBJ := $(SRC:src/%.cpp=$(BUILD)/%.o)
+DEP := $(OBJ:.o=.d)
 CURRENT_DATE = $(shell date +"%d/%m/%Y %H:%M:%S")
 MAKEFLAGS += -s
 
@@ -30,6 +32,7 @@ all: header $(NAME)
 
 $(NAME) : $(OBJ)
 	@${CPP} ${FLAGS} $(OBJ) -o $(NAME)
+	@echo "${GREEN}ircserv built successfully.${NC}"
 
 header:
 	@clear
@@ -41,18 +44,21 @@ header:
 	@echo "╚═╝        ╚═╝╚══════╝╚═╝╚═╝  ╚═╝ ╚═════╝"
 	@echo "Compilation in progress...${NC}"
 
-%.o : %.cpp
-	@${CPP} ${FLAGS} -c $< -o $@
+$(BUILD)/%.o : src/%.cpp
+	@mkdir -p $(@D)
+	@${CPP} ${FLAGS} -MMD -MP -c $< -o $@
 	@echo "${CURRENT_DATE} ${GREENS}[CMD]${NC}${GREEN} - $(basename $<)${NC}"
 
 clean:
-	@echo "${RED}Cleaning object files...${NC}"
-	@rm -f ${OBJ}
+	@echo "${RED}Cleaning object and dep files files...${NC}"
+	@rm -rf ${BUILD}
 	@echo "${RED}Cleaning completed.${NC}"
 
 fclean: clean
 	@rm -f ${NAME}
 
 re: fclean all
+
+-include $(DEP)
 
 .PHONY: all clean fclean re header
