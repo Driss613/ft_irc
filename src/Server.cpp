@@ -6,7 +6,7 @@
 /*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/13 18:37:53 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/15 15:44:29 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,6 @@ void	Server::newData(int fd)
 		buffer[bytes] = '\0';
 		std::cout << "Client " << fd << " Data : " << buffer;
 	}
-	(void)fd;
 }
 
 void Server::serverInit()
