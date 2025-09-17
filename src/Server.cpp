@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/13 18:37:53 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/16 14:51:13 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@ Server::~Server()
 
 /*Server& operator=(const Server& rhs)
 {};*/
+
+void Server::setpasswd(std::string passwd) {
+	password = passwd;
+}
+
+std::string Server::getpasswd(void) const {
+	return password;
+}
+
+std::vector<Client> Server::getClients(void) const {
+	return _clients;
+}
 
 void Server::setupSocket()
 {

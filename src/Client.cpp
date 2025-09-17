@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/13 14:16:08 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/16 14:59:30 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,16 @@ int	Client::getFd(void) const
 	return _fd;
 }
 
+std::string Client::getNickname() const
+{
+	return nickname;
+}
+
+std::string Client::getUsername() const
+{
+	return username;
+}
+
 void	Client::setIp(const std::string& ip)
 {
 	_ip = ip;
@@ -42,4 +52,14 @@ void	Client::setIp(const std::string& ip)
 void	Client::setFd(int fd)
 {
 	_fd = fd;
+}
+
+void	Client::setNickname(std::string str)
+{
+	nickname = str;
+}
+
+void	Client::setUsername(std::string str)
+{
+	username = str;
 }

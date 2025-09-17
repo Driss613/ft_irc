@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: drabarza <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: prosset <prosset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/11 15:25:07 by drabarza          #+#    #+#              #
-#    Updated: 2025/09/14 11:34:08 by drabarza         ###   ########.fr        #
+#    Updated: 2025/09/17 11:07:37 by prosset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ CPP := c++
 FLAGS := -Wall -Werror -Wextra -std=c++98
 SRC :=	src/main.cpp\
 		src/Client.cpp\
-		src/Server.cpp
+		src/Server.cpp\
+		src/parsing.cpp
 BUILD := .build
 OBJ := $(SRC:src/%.cpp=$(BUILD)/%.o)
 DEP := $(OBJ:.o=.d)

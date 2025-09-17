@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/13 17:57:52 by drabarza         ###   ########.fr       */
+/*   Updated: 2025/09/16 14:50:20 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Server
 		static bool _signal;
 		std::vector<Client> _clients;
 		std::vector<struct pollfd> _fds;
+		std::string password;
 	public :
 		Server(const int port = 4444);
 		Server(const Server& cpy);
@@ -46,4 +47,9 @@ class Server
 
 		void newClient(void);
 		void newData(int fd);
+
+		void setpasswd(std::string passwd);
+		std::string getpasswd(void) const;
+
+		std::vector<Client> getClients(void) const;
 };
