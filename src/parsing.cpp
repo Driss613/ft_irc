@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 10:11:18 by prosset           #+#    #+#             */
-/*   Updated: 2025/09/17 11:06:59 by prosset          ###   ########.fr       */
+/*   Updated: 2025/09/19 14:59:21 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,55 @@ void pars_nick(std::string str, Server &serv)
 
 bool pars_user(std::string str, Server &serv)
 {
-	 std::vector<Client> clients = serv.getClients();
+	std::vector<Client> clients = serv.getClients();
+	std::string args[4];
+	size_t index = 0;
+	size_t count = 0;
 
+	for (size_t i = 1; i < str.size(); i++)
+	{
+		if (str[i] == ' ' && str[i - 1] != ' ')
+			count++;
+	}
+	if (count < 3)
+	{
+		std::cerr << "Need more parameters." << std::endl;
+		return ;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		while (str[index] != ' ')
+		{
+			args[i] += str[index];
+			index++;	
+		}
+	}
+	while (str[index])
+	{
+		args[3] += str[index];
+		index++;
+	}
+	
 	for (size_t i = 0; i < clients.size(); i++)
 	{
-		if (str == clients[i].getUsername())
+		if (args[0] == clients[i].getUsername())
 		{
 			std::cerr << "Username unavailable." << std::endl;
 			return ;
 		}
 	}
+
+	for (size_t i = 0; i < args[1].size(); i++)
+	{
+		if (args[1][i] < '0' || args[1][i] > '9')
+		{
+			std::cerr << "Usermod should be a numeric." << std::endl;
+			return ;
+		}
+	}
+
+	
 	
 	// Lancer la commande Username //
 }
