@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 10:11:18 by prosset           #+#    #+#             */
-/*   Updated: 2025/09/19 14:59:21 by prosset          ###   ########.fr       */
+/*   Updated: 2025/09/23 11:41:49 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,35 @@ bool pars_quit(std::string str)
 	 
 }
 
-bool pars_mode(std::string str)
+bool pars_mode(std::string str, Client &c)
 {
-	 
+	std::string mods = "iwroOs";
+	std::string nickname;
+	std::string mod;
+	size_t i;
+
+	while (i < str.find(" "))
+	{
+		nickname += str[i];
+		i++;
+	}
+	i++;
+	while (i < str.size())
+	{
+		mod += str[i];
+		i++;
+	}
+
+	if (mod.empty() || mod.size() != 2 || mod[0] != '+' || mod[0] != '-')
+	{
+		std::cerr << "Error with mod parameter." << std::endl;
+		return ;
+	}
+
+	if (nickname != c.getNickname() || mod == "+o" || mod == "+O" || mod == "-r")
+		return ;
+
+	// Lancer la commande MODE //
 }
 
 bool pars_privmsg(std::string str)
