@@ -6,13 +6,13 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/16 14:50:20 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/03 16:19:50 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <string.h>
+#include <cstring>
 #include <iostream>
 #include <vector>
 #include <csignal>
@@ -23,6 +23,7 @@
 #include <arpa/inet.h> //inet_ntoa
 
 #include "Client.hpp"
+#include "./Commands/ACmd.hpp"
 
 class Server
 {
@@ -52,4 +53,6 @@ class Server
 		std::string getpasswd(void) const;
 
 		std::vector<Client> getClients(void) const;
+
+		void parsing(std::string str, int fd);
 };

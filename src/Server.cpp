@@ -6,11 +6,12 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/16 14:51:13 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/03 16:18:54 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
+#include "../includes/Commands/Manager.hpp"
 
 bool Server::_signal = false;
 
@@ -141,7 +142,7 @@ void	Server::newData(int fd)
 	char	buffer[1024];	// 
 	int		bytes;
 
-	memset(buffer, '\0', sizeof(buffer));
+	std::memset(buffer, '\0', sizeof(buffer));
 	bytes = recv(fd, buffer, sizeof(buffer) - 1, 0);
 	if (bytes <= 0)
 	{
@@ -178,4 +179,70 @@ void Server::serverInit()
 		}
 	}
 	closeFds();
+}
+
+
+
+void Server::parsing(std::string str, int fd)
+{
+	std::string prefix;
+	size_t i = 0;
+
+	if (str[0] == ':')
+	{
+		i++;
+		while (str[i] && i < str.find(' '))
+		{
+			prefix += str[i];
+			i++;
+		}
+		if (i == str.find(' '))
+			i++;
+	}
+
+	std::string cmd;
+	
+	while (str[i] && str[i] != ' ')
+	{
+		cmd += str[i];
+		i++;
+	}
+
+	if (!cmd[0])
+	{
+		std::cerr << "Please provide a command and arguments for your message." << std::endl;
+		return ;
+	}
+	
+	std::string args;
+
+	if (str[i] == ' ')
+		i++;
+		
+	while (str[i])
+	{
+		args += str[i];
+		i++;
+	}
+
+	if (!args[0])
+	{
+		std::cerr << "Please provide arguments for your command." << std::endl;
+		return ;
+	}
+
+	Server serv = *this;
+	std::vector<Client> clients = serv.getClients();
+	Client main;
+	for (size_t i = 0; i < clients.size(); i++)
+	{
+		if (clients[i].getFd() == fd)
+			main = clients[i];
+	}
+
+	Manager manager;
+	ACmd *com;
+
+	com = manager.makeCmd(cmd);
+	com->parsing(args, serv, main);
 }

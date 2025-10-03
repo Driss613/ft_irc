@@ -6,7 +6,7 @@
 #    By: prosset <prosset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/11 15:25:07 by drabarza          #+#    #+#              #
-#    Updated: 2025/09/17 11:07:37 by prosset          ###   ########.fr        #
+#    Updated: 2025/10/03 16:17:09 by prosset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,7 @@ CPP := c++
 FLAGS := -Wall -Werror -Wextra -std=c++98
 SRC :=	src/main.cpp\
 		src/Client.cpp\
-		src/Server.cpp\
-		src/parsing.cpp
+		src/Server.cpp
 BUILD := .build
 OBJ := $(SRC:src/%.cpp=$(BUILD)/%.o)
 DEP := $(OBJ:.o=.d)
