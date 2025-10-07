@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/07 13:19:17 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/07 13:35:34 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ public:
 
 	void parsing(std::string str, int fd);
 
-	void sendMessageToClient(int fd, const std::string &message);
+	void sendMessageToClient(Client &client, const std::string &message);
 };

@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/07 13:19:10 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/07 14:00:38 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ void Server::newData(int fd)
 	{
 		buffer[bytes] = '\0';
 		std::cout << "Client " << fd << " Data : " << buffer;
+		parsing(std::string(buffer), fd);
 	}
 	(void)fd;
 }
@@ -205,7 +206,6 @@ void Server::parsing(std::string str, int fd)
 	}
 
 	std::string cmd;
-
 	while (str[i] && str[i] != ' ')
 	{
 		cmd += str[i];
@@ -219,7 +219,6 @@ void Server::parsing(std::string str, int fd)
 	}
 
 	std::string args;
-
 	if (str[i] == ' ')
 		i++;
 
@@ -229,30 +228,34 @@ void Server::parsing(std::string str, int fd)
 		i++;
 	}
 
-	if (!args[0])
+	Client *mainClient = NULL;
+	for (size_t i = 0; i < _clients.size(); i++)
 	{
-		std::cerr << "Please provide arguments for your command." << std::endl;
+		if (_clients[i].getFd() == fd)
+		{
+			mainClient = &_clients[i];
+			break;
+		}
+	}
+
+	if (!mainClient)
+	{
+		std::cerr << "Error: Client not found" << std::endl;
 		return;
 	}
 
-	Server serv = *this;
-	std::vector<Client> clients = serv.getClients();
-	Client main;
-	for (size_t i = 0; i < clients.size(); i++)
-	{
-		if (clients[i].getFd() == fd)
-			main = clients[i];
-	}
-
 	Manager manager;
-	ACmd *com;
+	ACmd *com = manager.makeCmd(cmd);
 
-	com = manager.makeCmd(cmd);
-	com->parsing(args, serv, main);
+	if (com)
+	{
+		com->parsing(args, *this, *mainClient);
+		delete com;
+	}
 }
 
-void Server::sendMessageToClient(int fd, const std::string &message)
+void Server::sendMessageToClient(Client &client, const std::string &message)
 {
-	if (send(fd, message.c_str(), message.length(), 0) == -1)
-		std::cerr << "Error sending message to client " << fd << std::endl;
+	if (send(client.getFd(), message.c_str(), message.length(), 0) == -1)
+		std::cerr << "Error sending message to client " << client.getFd() << std::endl;
 }

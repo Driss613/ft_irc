@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/07 12:32:38 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/07 13:56:54 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,8 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	(void)serv;
 	// ERR_ALREADYREGISTRED //
 
-	// Lancer la commande Username //
+	main.setUsername(args[0]);
+	serv.sendMessageToClient(
+		main,
+		":irc.example.com " + main.getNickname() + " :USER command received, waiting for PASS command\r\n");
 }

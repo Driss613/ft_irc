@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:51:40 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/07 13:20:33 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/07 13:53:49 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,8 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 
 	main.setNickname(str);
-	serv.sendMessageToClient(main.getFd(), str + " :Welcome to the IRC server\r\n");
+
+	serv.sendMessageToClient(
+		main,
+		":irc.example.com " + main.getNickname() + " :NICK command received, waiting for USER command\r\n");
 }
