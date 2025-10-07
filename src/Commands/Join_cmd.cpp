@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Join_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:54:26 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:19:02 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/07 12:28:09 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Join_cmd.hpp"
+#include "../../includes/Commands/Join_cmd.hpp"
 
 Join_cmd::Join_cmd() {}
-		
+
 Join_cmd::~Join_cmd() {}
 
 void Join_cmd::parsing(std::string str, Server &serv, Client &main)
@@ -21,12 +21,12 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (str == "0")
 	{
 		// Lancer la commande PART avec en argument tous les channels du client //
-		return ;
+		return;
 	}
 
 	std::vector<std::string> chans;
 	std::vector<std::string> keys;
-	
+
 	size_t i = 0;
 	while (i < str.size() && i < str.find(' '))
 	{
@@ -58,8 +58,10 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (keys.empty())
 	{
 		std::cerr << "Error : need more params." << std::endl;
-		return ;
+		return;
 	}
+	(void)main;
+	(void)serv;
 
 	// i = 0;
 	// std::vector<Channel> channels = serv.getChannels();
@@ -95,7 +97,7 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 	// 	}
 	// 	i++;
 	// }
-	
+
 	// ERR_BADCHANMASK //
 
 	// ERR_BANNEDFROMCHAN //

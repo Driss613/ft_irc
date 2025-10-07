@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ACmd.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:20:28 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 16:22:53 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/07 11:37:43 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 #include "../Client.hpp"
 #include "../Server.hpp"
 
-class ACmd {
-	private:
-		
-	public:
-		ACmd();
-		virtual ~ACmd();
-		virtual void parsing(std::string str, Server &serv, Client &main) = 0;
+class Server;
+
+class ACmd
+{
+private:
+public:
+	ACmd();
+	virtual ~ACmd();
+	virtual void parsing(std::string str, Server &serv, Client &main) = 0;
 };

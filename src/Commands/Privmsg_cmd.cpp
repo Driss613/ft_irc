@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Privmsg_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:51 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:20:54 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/07 12:32:55 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Privmsg_cmd.hpp"
+#include "../../includes/Commands/Privmsg_cmd.hpp"
 
 Privmsg_cmd::Privmsg_cmd() {}
-		
+
 Privmsg_cmd::~Privmsg_cmd() {}
 
 void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
@@ -25,7 +25,7 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (str.empty())
 	{
 		std::cerr << "Error : no target given." << std::endl;
-		return ;
+		return;
 	}
 
 	while (i < str.find(' ') && i < str.size())
@@ -44,7 +44,7 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (message.empty())
 	{
 		std::cerr << "Error : no message given." << std::endl;
-		return ;
+		return;
 	}
 
 	std::string nick;
@@ -54,10 +54,10 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 		nick += target[i];
 		i++;
 	}
-	
+
 	std::vector<Client> clients = serv.getClients();
 	bool nick_exist = 0;
-	
+
 	for (size_t i = 0; i < clients.size(); i++)
 	{
 		if (nick == clients[i].getNickname())
@@ -66,9 +66,10 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (!nick_exist)
 	{
 		std::cerr << "Error : no such nickname on the server." << std::endl;
-		return ;
+		return;
 	}
-
+	(void)main;
+	(void)serv;
 	// ERR_CANNOTSENDTOCHAN //
 
 	// ERR_NOTOPLEVEL //

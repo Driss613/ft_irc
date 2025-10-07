@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/03 16:18:54 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/07 13:19:10 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,38 @@
 bool Server::_signal = false;
 
 Server::Server(const int port) : _port(port), _serverSocketFd(-1)
-{}
+{
+}
 
-Server::Server(const Server& cpy) : _port(cpy._port)
-{}
+Server::Server(const Server &cpy) : _port(cpy._port)
+{
+}
 
 Server::~Server()
-{}
+{
+}
 
 /*Server& operator=(const Server& rhs)
 {};*/
 
-void Server::setpasswd(std::string passwd) {
+void Server::setpasswd(std::string passwd)
+{
 	password = passwd;
 }
 
-std::string Server::getpasswd(void) const {
+std::string Server::getpasswd(void) const
+{
 	return password;
 }
 
-std::vector<Client> Server::getClients(void) const {
+std::vector<Client> Server::getClients(void) const
+{
 	return _clients;
 }
 
 void Server::setupSocket()
 {
-	struct sockaddr_in	serverAddress;
+	struct sockaddr_in serverAddress;
 	struct pollfd serverPollFd;
 	int option;
 
@@ -56,7 +62,7 @@ void Server::setupSocket()
 		throw std::runtime_error("Error : setsockopt");
 	if (fcntl(_serverSocketFd, F_SETFL, O_NONBLOCK) == -1)
 		throw std::runtime_error("Error : fcntl");
-	if (bind(_serverSocketFd, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1)
+	if (bind(_serverSocketFd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
 		throw std::runtime_error("Error : bind");
 	if (listen(_serverSocketFd, SOMAXCONN) == -1)
 		throw std::runtime_error("Error : listen");
@@ -87,25 +93,25 @@ void Server::closeFds()
 	}
 }
 
-void	Server::newClient()
+void Server::newClient()
 {
-	Client				newClient;
-	struct sockaddr_in	clientAdd;
-	struct pollfd		newPollFd;
-	int					clientSocket;
-	socklen_t			len;
+	Client newClient;
+	struct sockaddr_in clientAdd;
+	struct pollfd newPollFd;
+	int clientSocket;
+	socklen_t len;
 
 	len = sizeof(clientAdd);
-	clientSocket = accept(_serverSocketFd, (struct sockaddr*)&clientAdd, &len);
+	clientSocket = accept(_serverSocketFd, (struct sockaddr *)&clientAdd, &len);
 	if (clientSocket == -1)
 	{
 		throw std::runtime_error("Error : Accept");
-		return ;
+		return;
 	}
 	if (fcntl(clientSocket, F_SETFL, O_NONBLOCK) == -1)
 	{
 		throw std::runtime_error("Error : fcntl");
-		return ;
+		return;
 	}
 	newPollFd.fd = clientSocket;
 	newPollFd.events = POLLIN;
@@ -117,14 +123,14 @@ void	Server::newClient()
 	std::cout << "Client " << clientSocket << " connected." << std::endl;
 }
 
-void	Server::removeClient(int fd)
+void Server::removeClient(int fd)
 {
 	for (size_t i = 0; i < _fds.size(); i++)
 	{
 		if (_fds[i].fd == fd)
 		{
 			_fds.erase(_fds.begin() + i);
-			break ;
+			break;
 		}
 	}
 	for (size_t i = 0; i < _clients.size(); i++)
@@ -132,15 +138,15 @@ void	Server::removeClient(int fd)
 		if (_clients[i].getFd() == fd)
 		{
 			_clients.erase(_clients.begin() + i);
-			break ;
+			break;
 		}
 	}
 }
 
-void	Server::newData(int fd)
+void Server::newData(int fd)
 {
-	char	buffer[1024];	// 
-	int		bytes;
+	char buffer[1024]; //
+	int bytes;
 
 	std::memset(buffer, '\0', sizeof(buffer));
 	bytes = recv(fd, buffer, sizeof(buffer) - 1, 0);
@@ -163,7 +169,7 @@ void Server::serverInit()
 	setupSocket();
 	std::cout << "Server " << _serverSocketFd << " connected" << std::endl;
 	std::cout << "Waiting for a new connection !!!" << std::endl;
-	while(_signal != true)
+	while (_signal != true)
 	{
 		if ((poll(&_fds[0], _fds.size(), -1) == -1) && (_signal != true))
 			throw std::runtime_error("Error  poll");
@@ -180,8 +186,6 @@ void Server::serverInit()
 	}
 	closeFds();
 }
-
-
 
 void Server::parsing(std::string str, int fd)
 {
@@ -201,7 +205,7 @@ void Server::parsing(std::string str, int fd)
 	}
 
 	std::string cmd;
-	
+
 	while (str[i] && str[i] != ' ')
 	{
 		cmd += str[i];
@@ -211,14 +215,14 @@ void Server::parsing(std::string str, int fd)
 	if (!cmd[0])
 	{
 		std::cerr << "Please provide a command and arguments for your message." << std::endl;
-		return ;
+		return;
 	}
-	
+
 	std::string args;
 
 	if (str[i] == ' ')
 		i++;
-		
+
 	while (str[i])
 	{
 		args += str[i];
@@ -228,7 +232,7 @@ void Server::parsing(std::string str, int fd)
 	if (!args[0])
 	{
 		std::cerr << "Please provide arguments for your command." << std::endl;
-		return ;
+		return;
 	}
 
 	Server serv = *this;
@@ -245,4 +249,10 @@ void Server::parsing(std::string str, int fd)
 
 	com = manager.makeCmd(cmd);
 	com->parsing(args, serv, main);
+}
+
+void Server::sendMessageToClient(int fd, const std::string &message)
+{
+	if (send(fd, message.c_str(), message.length(), 0) == -1)
+		std::cerr << "Error sending message to client " << fd << std::endl;
 }

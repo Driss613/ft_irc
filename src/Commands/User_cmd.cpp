@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   User_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:22:30 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/07 12:32:38 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "User_cmd.hpp"
+#include "../../includes/Commands/User_cmd.hpp"
 
 User_cmd::User_cmd() {}
-		
+
 User_cmd::~User_cmd() {}
 
 void User_cmd::parsing(std::string str, Server &serv, Client &main)
@@ -31,7 +31,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (count < 3)
 	{
 		std::cerr << "Error : need more parameters." << std::endl;
-		return ;
+		return;
 	}
 
 	for (int i = 0; i < 3; i++)
@@ -39,7 +39,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 		while (index < str.find(' '))
 		{
 			args[i] += str[index];
-			index++;	
+			index++;
 		}
 		index++;
 	}
@@ -48,13 +48,13 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 		args[3] += str[index];
 		index++;
 	}
-	
+
 	for (size_t i = 0; i < clients.size(); i++)
 	{
 		if (args[0] == clients[i].getUsername())
 		{
 			std::cerr << "Error : username unavailable." << std::endl;
-			return ;
+			return;
 		}
 	}
 
@@ -63,10 +63,11 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 		if (args[1][i] < '0' || args[1][i] > '9')
 		{
 			std::cerr << "Error : usermod should be a numeric." << std::endl;
-			return ;
+			return;
 		}
 	}
-
+	(void)main;
+	(void)serv;
 	// ERR_ALREADYREGISTRED //
 
 	// Lancer la commande Username //

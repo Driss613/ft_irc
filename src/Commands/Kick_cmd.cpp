@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Kick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:19:16 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/07 12:29:27 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Kick_cmd.hpp"
+#include "../../includes/Commands/Kick_cmd.hpp"
 
 Kick_cmd::Kick_cmd() {}
-		
+
 Kick_cmd::~Kick_cmd() {}
 
 void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
@@ -61,14 +61,16 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (users.empty())
 	{
 		std::cerr << "Error : need more params." << std::endl;
-		return ;
+		return;
 	}
-	
+
 	if (chans.size() != 1 && chans.size() != users.size())
 	{
 		std::cerr << "Error : there must be either one channel or as many channels as users." << std::endl;
-		return ;
+		return;
 	}
+	(void)main;
+	(void)serv;
 
 	// if (chans.size() == 1)
 	// {
@@ -135,7 +137,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 	// ERR_BADCHANMASK //
 
 	// ERR_CHANOPRIVSNEEDED //
-	
+
 	// ERR_NOTONCHANNEL //
 
 	// Lancer la commande KICK //

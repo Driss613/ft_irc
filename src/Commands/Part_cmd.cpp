@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   Part_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:25 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:20:24 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/07 12:31:01 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Part_cmd.hpp"
+#include "../../includes/Commands/Part_cmd.hpp"
 
 Part_cmd::Part_cmd() {}
-		
+
 Part_cmd::~Part_cmd() {}
 
 void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 {
 	std::vector<std::string> chans;
-	
+
 	if (str.empty())
 	{
 		std::cerr << "Error : need more params." << std::endl;
-		return ;
+		return;
 	}
 
 	size_t i = 0;
@@ -51,6 +51,8 @@ void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 		}
 	}
 
+	(void)main;
+	(void)serv;
 	// std::vector<Channel> main_chans = main.getChannels();
 	// std::vector<Channel> channels = serv.getChannels();
 	// for (size_t j = 0; j < chans.size(); j++)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/03 16:19:50 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/07 13:19:17 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,35 @@
 
 class Server
 {
-	private :
-		const int _port;
-		int _serverSocketFd;
-		static bool _signal;
-		std::vector<Client> _clients;
-		std::vector<struct pollfd> _fds;
-		std::string password;
-	public :
-		Server(const int port = 4444);
-		Server(const Server& cpy);
-		~Server();
-		//Server& operator=(const Server& rhs);
-		void serverInit(void);
-		void setupSocket(void);
+private:
+	const int _port;
+	int _serverSocketFd;
+	static bool _signal;
+	std::vector<Client> _clients;
+	std::vector<struct pollfd> _fds;
+	std::string password;
 
-		static void signalHandler(int signum);
-		void closeFds(void);
-		void removeClient(int fd);
+public:
+	Server(const int port = 4444);
+	Server(const Server &cpy);
+	~Server();
+	// Server& operator=(const Server& rhs);
+	void serverInit(void);
+	void setupSocket(void);
 
-		void newClient(void);
-		void newData(int fd);
+	static void signalHandler(int signum);
+	void closeFds(void);
+	void removeClient(int fd);
 
-		void setpasswd(std::string passwd);
-		std::string getpasswd(void) const;
+	void newClient(void);
+	void newData(int fd);
 
-		std::vector<Client> getClients(void) const;
+	void setpasswd(std::string passwd);
+	std::string getpasswd(void) const;
 
-		void parsing(std::string str, int fd);
+	std::vector<Client> getClients(void) const;
+
+	void parsing(std::string str, int fd);
+
+	void sendMessageToClient(int fd, const std::string &message);
 };
