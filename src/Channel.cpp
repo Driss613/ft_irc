@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:23 by lisambet          #+#    #+#             */
-/*   Updated: 2025/10/06 13:46:40 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/08 08:57:51 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void Channel::removeMember(int fd)
 			break;
 		}
 	}
+	removeOperator(fd);
+	removeInvited(fd);
 }
 
 bool Channel::isMember(int fd) const
@@ -99,4 +101,84 @@ Client &Channel::findMember(const std::string &nickname, const std::vector<Clien
 	}
 	static Client emptyClient;
 	return emptyClient;
+}
+
+void Channel::addInvited(int fd)
+{
+	if (!isInvited(fd))
+		_invited.push_back(fd);
+}
+
+void Channel::removeInvited(int fd)
+{
+	for (size_t i = 0; i < _invited.size(); i++)
+	{
+		if (_invited[i] == fd)
+		{
+			_invited.erase(_invited.begin() + i);
+			break;
+		}
+	}
+}
+
+bool Channel::isInvited(int fd) const
+{
+	for (size_t i = 0; i < _invited.size(); i++)
+	{
+		if (_invited[i] == fd)
+			return true;
+	}
+	return false;
+}
+
+void Channel::setKey(const std::string &key)
+{
+	_key = key;
+}
+
+const std::string &Channel::getKey() const
+{
+	return _key;
+}
+
+bool Channel::hasKey() const
+{
+	return !_key.empty();
+}
+
+void Channel::removeKey()
+{
+	_key = "";
+}
+
+// Limit management
+void Channel::setLimit(size_t limit)
+{
+	_limit = limit;
+}
+
+size_t Channel::getLimit() const
+{
+	return _limit;
+}
+
+bool Channel::hasLimit() const
+{
+	return _limit > 0;
+}
+
+void Channel::removeLimit()
+{
+	_limit = 0;
+}
+
+// Invite-only mode
+void Channel::setInviteOnly(bool inviteOnly)
+{
+	_inviteOnly = inviteOnly;
+}
+
+bool Channel::isInviteOnly() const
+{
+	return _inviteOnly;
 }

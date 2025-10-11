@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:51:40 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/07 13:53:49 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:26:11 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,13 @@ Nick_cmd::~Nick_cmd() {}
 
 void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 {
-	std::vector<Client> clients = serv.getClients();
+	std::vector<Client> &clients = serv.getClients();
 
 	if (str.empty())
 	{
 		std::cerr << "Error : no nickname given." << std::endl;
 		return;
 	}
-
 	if (str.size() > 9)
 	{
 		std::cerr << "Error : please enter a nickname of maximum 9 characters." << std::endl;
@@ -41,10 +40,10 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 			return;
 		}
 	}
-
-	main.setNickname(str);
+	Client &client = serv.getFd(main.getFd());
+	client.setNickname(str);
 
 	serv.sendMessageToClient(
-		main,
-		":irc.example.com " + main.getNickname() + " :NICK command received, waiting for USER command\r\n");
+		client,
+		":irc.example.com " + client.getNickname() + " :NICK command received, waiting for USER command\r\n");
 }

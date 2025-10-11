@@ -6,7 +6,7 @@
 #    By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/11 15:25:07 by drabarza          #+#    #+#              #
-#    Updated: 2025/10/07 11:39:56 by lisambet         ###   ########.fr        #
+#    Updated: 2025/10/08 09:02:15 by lisambet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ FLAGS := -Wall -Werror -Wextra -std=c++98
 SRC :=	src/main.cpp\
 		src/Client.cpp\
 		src/Server.cpp \
+		src/Channel.cpp \
 		src/Commands/ACmd.cpp \
 		src/Commands/Manager.cpp \
 		src/Commands/Nick_cmd.cpp \

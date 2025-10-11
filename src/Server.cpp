@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/07 14:00:38 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:27:47 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,17 @@ Server::~Server()
 {
 }
 
-/*Server& operator=(const Server& rhs)
-{};*/
+Server &Server::operator=(const Server &rhs)
+{
+	if (this != &rhs)
+	{
+		_serverSocketFd = rhs._serverSocketFd;
+		_clients = rhs._clients;
+		_fds = rhs._fds;
+		password = rhs.password;
+	}
+	return *this;
+}
 
 void Server::setpasswd(std::string passwd)
 {
@@ -40,9 +49,24 @@ std::string Server::getpasswd(void) const
 	return password;
 }
 
-std::vector<Client> Server::getClients(void) const
+Client &Server::getFd(int fd)
 {
-	return _clients;
+	for (size_t i = 0; i < _clients.size(); ++i)
+	{
+		if (_clients[i].getFd() == fd)
+			return _clients[i];
+	}
+	throw std::runtime_error("Client not found");
+}
+
+const Client &Server::getFd(int fd) const
+{
+	for (size_t i = 0; i < _clients.size(); ++i)
+	{
+		if (_clients[i].getFd() == fd)
+			return _clients[i];
+	}
+	throw std::runtime_error("Client not found");
 }
 
 void Server::setupSocket()
@@ -227,6 +251,18 @@ void Server::parsing(std::string str, int fd)
 		args += str[i];
 		i++;
 	}
+	while (!args.empty() && (args[args.size() - 1] == '\r' ||
+							 args[args.size() - 1] == '\n' ||
+							 args[args.size() - 1] == ' ' ||
+							 args[args.size() - 1] == '\t'))
+	{
+		args.resize(args.size() - 1);
+	}
+
+	while (!args.empty() && (args[0] == ' ' || args[0] == '\t'))
+	{
+		args.erase(0, 1);
+	}
 
 	Client *mainClient = NULL;
 	for (size_t i = 0; i < _clients.size(); i++)
@@ -258,4 +294,45 @@ void Server::sendMessageToClient(Client &client, const std::string &message)
 {
 	if (send(client.getFd(), message.c_str(), message.length(), 0) == -1)
 		std::cerr << "Error sending message to client " << client.getFd() << std::endl;
+}
+void Server::sendMessageToClient(int fd, const std::string &message)
+{
+	if (send(fd, message.c_str(), message.length(), 0) == -1)
+		std::cerr << "Error sending message to fd " << fd << std::endl;
+}
+
+Channel *Server::getChannel(const std::string &name)
+{
+	for (size_t i = 0; i < _channels.size(); i++)
+	{
+		if (_channels[i].getName() == name)
+			return &_channels[i];
+	}
+	return NULL;
+}
+
+std::vector<Client> &Server::getClients()
+{
+	return _clients;
+}
+
+const std::vector<Client> &Server::getClients() const
+{
+	return _clients;
+}
+
+Channel *Server::createChannel(const std::string &name)
+{
+	_channels.push_back(Channel(name));
+	_channels.back().setInviteOnly(false);
+	_channels.back().setTopic("No topic is set");
+	return &_channels[_channels.size() - 1];
+}
+
+void Server::addClientToChannel(const std::string &channelName, int fd)
+{
+	Channel *chan = getChannel(channelName);
+	if (!chan)
+		chan = createChannel(channelName);
+	chan->addMember(fd);
 }

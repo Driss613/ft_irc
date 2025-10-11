@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:00:34 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/07 12:29:46 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:16:39 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 		return;
 	}
 
-	std::vector<Client> clients = serv.getClients();
+	std::vector<Client> &clients = serv.getClients();
 	bool nick_exist = 0;
 
 	for (size_t i = 0; i < clients.size(); i++)

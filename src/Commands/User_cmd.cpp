@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/07 13:56:54 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:16:43 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ User_cmd::~User_cmd() {}
 
 void User_cmd::parsing(std::string str, Server &serv, Client &main)
 {
-	std::vector<Client> clients = serv.getClients();
+	std::vector<Client> &clients = serv.getClients();
 	std::string args[4];
 	size_t index = 0;
 	size_t count = 0;
