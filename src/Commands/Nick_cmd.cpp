@@ -6,11 +6,12 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:51:40 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:19:44 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/14 14:31:49 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Nick_cmd.hpp"
+#include "../../includes/Commands/Nick_cmd.hpp"
+#include "../../includes/Server.hpp"
 
 Nick_cmd::Nick_cmd() {}
 		
@@ -41,5 +42,11 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 		}
 	}
 	
-	// Lancer la commande Nickname //
+	Client &client = serv.getFd(main.getFd());
+	client.setNickname(str);
+	client.setRank(1);
+
+	serv.sendMessageToClient(
+		client,
+		":irc.example.com " + client.getNickname() + " :NICK command received, waiting for USER command\r\n");
 }

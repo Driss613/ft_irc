@@ -6,11 +6,12 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:22:30 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/14 15:40:21 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "User_cmd.hpp"
+#include "../../includes/Commands/User_cmd.hpp"
+#include "../../includes/Server.hpp"
 
 User_cmd::User_cmd() {}
 		
@@ -67,7 +68,12 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 		}
 	}
 
-	// ERR_ALREADYREGISTRED //
+	(void)main;
+	(void)serv;
 
-	// Lancer la commande Username //
+	main.setUsername(args[0]);
+	main.setRank(2);
+	serv.sendMessageToClient(
+		main,
+		":irc.example.com " + main.getNickname() + " :USER command received, waiting for PASS command\r\n");
 }

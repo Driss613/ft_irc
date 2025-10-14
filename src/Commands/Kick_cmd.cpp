@@ -6,11 +6,13 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:19:16 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/14 16:14:27 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Kick_cmd.hpp"
+#include "../../includes/Commands/Kick_cmd.hpp"
+#include "../../includes/Server.hpp"
+#include <sstream>
 
 Kick_cmd::Kick_cmd() {}
 		
@@ -70,73 +72,169 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 		return ;
 	}
 
-	// if (chans.size() == 1)
-	// {
-	// 	std::vector<Channel> channels = serv.getChannels();
-	// 	bool chan_exist = 0;
-	// 	for (size_t i = 0; i < channels.size(); i++)
-	// 	{
-	// 		if (chans[0] == channels[i].getChanName())
-	// 		{
-	// 			chan_exist = 1;
-	// 			std::vector<Client> chan_members = channels[i].getMembers();
-	// 			for (size_t n = 0; n < users.size(); n++)
-	// 			{
-	// 				bool user_exist = 0;
-	// 				for (size_t j = 0; j < chan_members.size(); j++)
-	// 				{
-	// 					if (users[n] == chan_members[j].getNickname())
-	// 						user_exist = 1;
-	// 				}
-	// 				if (!user_exist)
-	// 				{
-	// 					std::cerr << "Error : user " << users[n] << " is not on channel" << chans[0] << "." << std::endl;
-	// 					users[n] = "";
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// else
-	// {
-	// 	for (size_t j = 0; j < chans.size(); j++)
-	// 	{
-	// 		std::vector<Channel> channels = serv.getChannels();
-	// 		bool chan_exist = 0;
-	// 		for (size_t i = 0; i < channels.size(); i++)
-	// 		{
-	// 			if (chans[j] == channels[i].getChanName())
-	// 			{
-	// 				chan_exist = 1;
-	// 				std::vector<Client> chan_members = channels[i].getMembers();
-	// 				bool user_exist = 0;
-	// 				for (size_t n = 0; n < chan_members.size(); n++)
-	// 				{
-	// 					if (users[j] == chan_members[n].getNickname())
-	// 						user_exist = 1;
-	// 				}
-	// 				if (!user_exist)
-	// 				{
-	// 					std::cerr << "Error : user " << users[j] << " is not on channel" << chans[j] << "." << std::endl;
-	// 					users[j] = "";
-	// 					chans[j] = "";
-	// 				}
-	// 			}
-	// 		}
-	// 		if (!chan_exist)
-	// 		{
-	// 			std::cerr << "Error : no such channel as " << chans[j] << "." << std::endl;
-	// 			users[j] = "";
-	// 			chans[j] = "";
-	// 		}
-	// 	}
-	// }
+	if (chans.size() == 1)
+	{
+		std::vector<Client> clients = serv.getClients();
+		Channel *channel = serv.getChannel(chans[0]);
+		if (!channel)
+		{
+			std::cerr << "Error : no such channel as " << chans[0] << "." << std::endl;
+			return ;
+		}
+		
+		for (size_t i = 0; i < users.size(); i++)
+		{
+			Client *client = NULL;
+			
+			for (size_t j = 0; j < clients.size(); j++)
+			{
+				if (users[i] == clients[j].getNickname())
+					client = &serv.getFd(clients[j].getFd());
+			}
+			if (!client)
+			{
+				std::cerr << "Error : user " << users[i] << " is not on the server." << std::endl;
+				users[i] = "";
+			}
+			if (!channel->isMember(client->getFd()))
+			{
+				std::cerr << "Error : user " << users[i] << " is not on channel" << chans[0] << "." << std::endl;
+				users[i] = "";
+			}
+
+			if (!channel->isMember(main.getFd()))
+			{
+				std::cerr << "Error : you are not on this channel." << std::endl;
+				return ;
+			}
+
+			if (!channel->isOperator(main.getFd()))
+			{
+				std::cerr << "Error : you don't have operator privileges for this channel." << std::endl;
+				return ;
+			}
+		}
+	}
+	else
+	{
+		for (size_t i = 0; i < chans.size(); i++)
+		{
+			std::vector<Client> clients = serv.getClients();
+			Channel *channel = serv.getChannel(chans[i]);
+			if (!channel)
+			{
+				std::cerr << "Error : no such channel as " << chans[i] << "." << std::endl;
+				chans[i] = "";
+			}
+			
+			Client *client = NULL;
+				
+			for (size_t j = 0; j < clients.size(); j++)
+			{
+				if (users[i] == clients[j].getNickname())
+					client = &serv.getFd(clients[j].getFd());
+			}
+			if (!client)
+			{
+				std::cerr << "Error : user " << users[i] << " is not on the server." << std::endl;
+				users[i] = "";
+				chans[i] = "";
+			}
+			if (!channel->isMember(client->getFd()))
+			{
+				std::cerr << "Error : user " << users[i] << " is not on channel" << chans[i] << "." << std::endl;
+				users[i] = "";
+				chans[i] = "";
+			}
+
+			if (!channel->isMember(main.getFd()))
+			{
+				std::cerr << "Error : you are not on channel " << chans[i] << "." << std::endl;
+				users[i] = "";
+				chans[i] = "";
+			}
+
+			if (!channel->isOperator(main.getFd()))
+			{
+				std::cerr << "Error : you don't have operator privileges for channel " << chans[i] << "." << std::endl;
+				users[i] = "";
+				chans[i] = "";
+			}
+		}
+	}
 
 	// ERR_BADCHANMASK //
 
-	// ERR_CHANOPRIVSNEEDED //
-	
-	// ERR_NOTONCHANNEL //
 
-	// Lancer la commande KICK //
+	// std::istringstream iss(str);
+	// std::string channelName, targetNick;
+	// std::string reason;
+
+	// iss >> channelName >> targetNick;
+	// std::getline(iss, reason);
+	// if (!reason.empty() && reason[0] == ' ')
+	// 	reason.erase(0, 1);
+	// if (reason.empty())
+	// 	reason = "Kicked";
+
+	// if (channelName.empty() || targetNick.empty())
+	// {
+	// 	std::cerr << "Error : need more params." << std::endl;
+	// 	return;
+	// }
+
+	// Client &sender = serv.getFd(main.getFd());
+	// Channel *channel = serv.getChannel(channelName);
+	// if (!channel)
+	// {
+	// 	serv.sendMessageToClient(sender, "403 " + channelName + " :No such channel\r\n");
+	// 	return;
+	// }
+
+	// if (!channel->isOperator(sender.getFd()))
+	// {
+	// 	serv.sendMessageToClient(sender, "482 " + channelName + " :You're not channel operator\r\n");
+	// 	return;
+	// }
+
+	// Client *target = NULL;
+	// std::vector<Client> &clients = serv.getClients();
+	// for (size_t i = 0; i < clients.size(); i++)
+	// {
+	// 	if (clients[i].getNickname() == targetNick)
+	// 	{
+	// 		target = &clients[i];
+	// 		break;
+	// 	}
+	// }
+
+	// if (!target)
+	// {
+	// 	serv.sendMessageToClient(sender, "401 " + targetNick + " :No such nick\r\n");
+	// 	return;
+	// }
+
+	// if (target->getFd() == sender.getFd())
+	// {
+	// 	serv.sendMessageToClient(sender, "484 :You cannot kick yourself\r\n");
+	// 	return;
+	// }
+
+	// if (!channel->isMember(target->getFd()))
+	// {
+	// 	serv.sendMessageToClient(sender, "441 " + targetNick + " " + channelName + " :They aren't on that channel\r\n");
+	// 	return;
+	// }
+
+	// std::string kickMsg = ":" + sender.getNickname() + "!" + sender.getUsername() +
+	// 					  "@server KICK " + channelName + " " + targetNick + " :" + reason + "\r\n";
+
+	// const std::vector<int> &members = channel->getMembers();
+	// for (size_t i = 0; i < members.size(); i++)
+	// {
+	// 	Client &member = serv.getFd(members[i]);
+	// 	serv.sendMessageToClient(member, kickMsg);
+	// }
+
+	// channel->removeMember(target->getFd());
 }

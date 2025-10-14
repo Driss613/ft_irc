@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/03 16:18:54 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/14 14:13:31 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,17 @@ Server::Server(const Server& cpy) : _port(cpy._port)
 Server::~Server()
 {}
 
-/*Server& operator=(const Server& rhs)
-{};*/
+Server &Server::operator=(const Server &rhs)
+{
+	if (this != &rhs)
+	{
+		_serverSocketFd = rhs._serverSocketFd;
+		_clients = rhs._clients;
+		_fds = rhs._fds;
+		password = rhs.password;
+	}
+	return *this;
+}
 
 void Server::setpasswd(std::string passwd) {
 	password = passwd;
@@ -35,8 +44,24 @@ std::string Server::getpasswd(void) const {
 	return password;
 }
 
-std::vector<Client> Server::getClients(void) const {
-	return _clients;
+Client &Server::getFd(int fd)
+{
+	for (size_t i = 0; i < _clients.size(); ++i)
+	{
+		if (_clients[i].getFd() == fd)
+			return _clients[i];
+	}
+	throw std::runtime_error("Client not found");
+}
+
+const Client &Server::getFd(int fd) const
+{
+	for (size_t i = 0; i < _clients.size(); ++i)
+	{
+		if (_clients[i].getFd() == fd)
+			return _clients[i];
+	}
+	throw std::runtime_error("Client not found");
 }
 
 void Server::setupSocket()
@@ -181,8 +206,6 @@ void Server::serverInit()
 	closeFds();
 }
 
-
-
 void Server::parsing(std::string str, int fd)
 {
 	std::string prefix;
@@ -201,7 +224,6 @@ void Server::parsing(std::string str, int fd)
 	}
 
 	std::string cmd;
-	
 	while (str[i] && str[i] != ' ')
 	{
 		cmd += str[i];
@@ -211,38 +233,100 @@ void Server::parsing(std::string str, int fd)
 	if (!cmd[0])
 	{
 		std::cerr << "Please provide a command and arguments for your message." << std::endl;
-		return ;
+		return;
 	}
-	
-	std::string args;
 
+	std::string args;
 	if (str[i] == ' ')
 		i++;
-		
+
 	while (str[i])
 	{
 		args += str[i];
 		i++;
 	}
-
-	if (!args[0])
+	while (!args.empty() && (args[args.size() - 1] == '\r' ||
+							 args[args.size() - 1] == '\n' ||
+							 args[args.size() - 1] == ' ' ||
+							 args[args.size() - 1] == '\t'))
 	{
-		std::cerr << "Please provide arguments for your command." << std::endl;
-		return ;
+		args.resize(args.size() - 1);
 	}
 
-	Server serv = *this;
-	std::vector<Client> clients = serv.getClients();
-	Client main;
-	for (size_t i = 0; i < clients.size(); i++)
+	while (!args.empty() && (args[0] == ' ' || args[0] == '\t'))
 	{
-		if (clients[i].getFd() == fd)
-			main = clients[i];
+		args.erase(0, 1);
+	}
+
+	Client *mainClient = NULL;
+	for (size_t i = 0; i < _clients.size(); i++)
+	{
+		if (_clients[i].getFd() == fd)
+		{
+			mainClient = &_clients[i];
+			break;
+		}
+	}
+
+	if (!mainClient)
+	{
+		std::cerr << "Error: Client not found" << std::endl;
+		return;
 	}
 
 	Manager manager;
-	ACmd *com;
+	ACmd *com = manager.makeCmd(cmd, mainClient->getRank());
 
-	com = manager.makeCmd(cmd);
-	com->parsing(args, serv, main);
+	if (com)
+	{
+		com->parsing(args, *this, *mainClient);
+		delete com;
+	}
+}
+
+void Server::sendMessageToClient(Client &client, const std::string &message)
+{
+	if (send(client.getFd(), message.c_str(), message.length(), 0) == -1)
+		std::cerr << "Error sending message to client " << client.getFd() << std::endl;
+}
+void Server::sendMessageToClient(int fd, const std::string &message)
+{
+	if (send(fd, message.c_str(), message.length(), 0) == -1)
+		std::cerr << "Error sending message to fd " << fd << std::endl;
+}
+
+Channel *Server::getChannel(const std::string &name)
+{
+	for (size_t i = 0; i < _channels.size(); i++)
+	{
+		if (_channels[i].getName() == name)
+			return &_channels[i];
+	}
+	return NULL;
+}
+
+std::vector<Client> &Server::getClients()
+{
+	return _clients;
+}
+
+const std::vector<Client> &Server::getClients() const
+{
+	return _clients;
+}
+
+Channel *Server::createChannel(const std::string &name)
+{
+	_channels.push_back(Channel(name));
+	_channels.back().setInviteOnly(false);
+	_channels.back().setTopic("No topic is set");
+	return &_channels[_channels.size() - 1];
+}
+
+void Server::addClientToChannel(const std::string &channelName, int fd)
+{
+	Channel *chan = getChannel(channelName);
+	if (!chan)
+		chan = createChannel(channelName);
+	chan->addMember(fd);
 }

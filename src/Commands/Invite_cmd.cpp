@@ -6,11 +6,12 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:00:34 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:18:44 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/14 15:20:29 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Invite_cmd.hpp"
+#include "../../includes/Commands/Invite_cmd.hpp"
+#include "../../includes/Server.hpp"
 
 Invite_cmd::Invite_cmd() {}
 		
@@ -41,50 +42,41 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 
 	std::vector<Client> clients = serv.getClients();
-	bool nick_exist = 0;
+	Client *client = NULL;
 	
 	for (size_t i = 0; i < clients.size(); i++)
 	{
 		if (nick == clients[i].getNickname())
-			nick_exist = 1;
+			client = &serv.getFd(clients[i].getFd());
 	}
-	if (!nick_exist)
+	if (!client)
 	{
-		std::cerr << "Error : no such nickname on the server." << std::endl;
+		std::cerr << "Error : no such client on the server." << std::endl;
 		return ;
 	}
 
-	// std::vector<Channel> channels = serv.getChannels();
-	// for (size_t i = 0; i < channels.size(); i++)
-	// {
-	// 	if (chan == channels[i].getChanName())
-	// 	{
-	// 		std::vector<Client> chan_members = channels[i].getMembers();
-	// 		for (size_t j = 0; j < chan_members.size(); j++)
-	// 		{
-	// 			if (nick == chan_members[j].getNickname())
-	// 			{
-	// 				std::cerr << "Error : user is already on the channel." << std::endl;
-	// 				return ;
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// std::vector<Channel> main_chans = main.getChannels();
-	// bool isonchan = 0;
-	// for (size_t i = 0; i < main_chans.size(); i++)
-	// {
-	// 	if (main_chans[i].getChanName() == chan)
-	// 		isonchan = 1;	
-	// }
-	// if (!isonchan)
-	// {
-	// 	std::cerr << "Error : you are not on channel " << chan << "." << std::endl;
-	// 	return ;
-	// }
-
-    // ERR_CHANOPRIVSNEEDED //
+	int fd = client->getFd();
+	Channel *channel = serv.getChannel(chan);
+	if (!channel)
+		return ;
+		
+	if (!channel->isMember(main.getFd()))
+	{
+		std::cerr << "Error : you are not on channel " << chan << "." << std::endl;
+		return ;
+	}
+	
+	if (channel->isMember(fd))
+	{
+		std::cerr << "Error : user is already on the channel." << std::endl;
+		return ;
+	}
+	
+    if (channel->isInviteOnly() && !channel->isOperator(main.getFd()))
+	{
+		std::cerr << "Error : invite-only channels require operator privileges to invite a new member." << std::endl;
+		return ;
+	}
 
 	// Lancer la commande INVITE //
 }

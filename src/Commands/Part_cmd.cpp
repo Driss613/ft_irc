@@ -6,11 +6,12 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:25 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 13:20:24 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/14 15:30:50 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Part_cmd.hpp"
+#include "../../includes/Commands/Part_cmd.hpp"
+#include "../../includes/Server.hpp"
 
 Part_cmd::Part_cmd() {}
 		
@@ -51,36 +52,20 @@ void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 		}
 	}
 
-	// std::vector<Channel> main_chans = main.getChannels();
-	// std::vector<Channel> channels = serv.getChannels();
-	// for (size_t j = 0; j < chans.size(); j++)
-	// {
-	// 	bool chan_exist = 0;
-	// 	for (size_t i = 0; i < channels.size(); i++)
-	// 	{
-	// 		if (chans[j] == channels[i].getChanName())
-	// 			chan_exist = 1;
-	// 	}
-	// 	if (!chan_exist)
-	// 	{
-	// 		std::cerr << "Error : no such channel as " << chans[j] << "." << std::endl;
-	// 		chans[j] = "";
-	// 	}
-	// 	else
-	// 	{
-	// 		bool isonchan = 0;
-	// 		for (size_t i = 0; i < main_chans.size(); i++)
-	// 		{
-	// 			if (main_chans[i].getChanName() == chans[j])
-	// 				isonchan = 1;
-	// 		}
-	// 		if (!isonchan)
-	// 		{
-	// 			std::cerr << "Error : you are not on channel " << chans[j] << "." << std::endl;
-	// 			chans[j] = "";
-	// 		}
-	// 	}
-	// }
+	for (size_t j = 0; j < chans.size(); j++)
+	{
+		Channel *channel = serv.getChannel(chans[j]);
+		if (!channel)
+		{
+			std::cerr << "Error : no such channel as " << chans[j] << "." << std::endl;
+			chans[j] = "";
+		}
+		if (!channel->isMember(main.getFd()))
+		{
+			std::cerr << "Error : you are not on channel " << chans[j] << "." << std::endl;
+			chans[j] = "";
+		}
+	}
 
 	// Lancer la commande PART //
 }

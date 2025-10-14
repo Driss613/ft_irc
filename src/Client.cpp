@@ -6,23 +6,33 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/16 14:59:30 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/14 14:54:21 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Client.hpp"
 
-Client::Client() : _ip(""), _fd(-1)
+Client::Client() : _ip(""), _fd(-1), _rank(0)
 {}
 
-Client::Client(const Client& cpy) : _ip(cpy._ip), _fd(cpy._fd)
+Client::Client(const Client& cpy) : _ip(cpy._ip), _fd(cpy._fd), _rank(cpy._rank)
 {}
 
 Client::~Client()
 {}
 
-/*Client& operator=(const Client& rhs)
-{};*/
+Client &Client::operator=(const Client &rhs)
+{
+	if (this != &rhs)
+	{
+		_ip = rhs._ip;
+		_fd = rhs._fd;
+		nickname = rhs.nickname;
+		username = rhs.username;
+		_rank = rhs._rank;
+	}
+	return *this;
+}
 
 const std::string&	Client::getIp(void) const
 {
@@ -44,6 +54,15 @@ std::string Client::getUsername() const
 	return username;
 }
 
+int Client::getRank() const
+{
+	return _rank;
+}
+
+std::vector<Channel> Client::getChannels() const {
+	return _channels;
+}
+
 void	Client::setIp(const std::string& ip)
 {
 	_ip = ip;
@@ -62,4 +81,9 @@ void	Client::setNickname(std::string str)
 void	Client::setUsername(std::string str)
 {
 	username = str;
+}
+
+void Client::setRank(int rank)
+{
+	_rank = rank;
 }
