@@ -3,3 +3,4 @@ ircserv
 *.o
 *.d
 .vscode/
+.gitignore

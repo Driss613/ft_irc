@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:54:26 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/14 15:00:44 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/15 13:23:35 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,24 +271,24 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 	// 			if (keys[i] != channels[n].getChanKey())
 	// 			{
 	// 				std::cerr << "Error : wrong channel key for channel " << chans[i] << "." << std::endl;
-	// 				chans[i] = "";
+	// 				chans.erase(chans.begin() + i);
 	// 			}
 	// 			if (channels[n].getInvite())
 	// 			{
 	// 				std::cerr << "Error : you tried to join an invite only channel : " << chans[i] << "." << std::endl;
-	// 				chans[i] = "";
+	// 				chans.erase(chans.begin() + i);
 	// 			}
 	// 			if (channels[n].getMembers().size() == 20)
 	// 			{
 	// 				std::cerr << "Error : channel " << chans[i] << " is full." << std::endl;
-	// 				chans[i] = "";
+	// 				chans.erase(chans.begin() + i);
 	// 			}
 	// 		}
 	// 	}
 	// 	if (!chan_exist)
 	// 	{
 	// 		std::cerr << "Error : no such channel as " << chans[i] << "." << std::endl;
-	// 		chans[i] = "";
+	// 		chans.erase(chans.begin() + i);
 	// 	}
 	// 	i++;
 	// }

@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:25 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/14 15:30:50 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/15 13:22:56 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 		if (!channel)
 		{
 			std::cerr << "Error : no such channel as " << chans[j] << "." << std::endl;
-			chans[j] = "";
+			chans.erase(chans.begin() + j);
 		}
 		if (!channel->isMember(main.getFd()))
 		{
 			std::cerr << "Error : you are not on channel " << chans[j] << "." << std::endl;
-			chans[j] = "";
+			chans.erase(chans.begin() + j);
 		}
 	}
 

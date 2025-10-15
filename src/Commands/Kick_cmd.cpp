@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/14 16:14:27 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/15 13:22:19 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,12 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			if (!client)
 			{
 				std::cerr << "Error : user " << users[i] << " is not on the server." << std::endl;
-				users[i] = "";
+				users.erase(users.begin() + i);
 			}
 			if (!channel->isMember(client->getFd()))
 			{
 				std::cerr << "Error : user " << users[i] << " is not on channel" << chans[0] << "." << std::endl;
-				users[i] = "";
+				users.erase(users.begin() + i);
 			}
 
 			if (!channel->isMember(main.getFd()))
@@ -124,7 +124,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			if (!channel)
 			{
 				std::cerr << "Error : no such channel as " << chans[i] << "." << std::endl;
-				chans[i] = "";
+				chans.erase(chans.begin() + i);
 			}
 			
 			Client *client = NULL;
@@ -137,28 +137,28 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			if (!client)
 			{
 				std::cerr << "Error : user " << users[i] << " is not on the server." << std::endl;
-				users[i] = "";
-				chans[i] = "";
+				users.erase(users.begin() + i);
+				chans.erase(chans.begin() + i);
 			}
 			if (!channel->isMember(client->getFd()))
 			{
 				std::cerr << "Error : user " << users[i] << " is not on channel" << chans[i] << "." << std::endl;
-				users[i] = "";
-				chans[i] = "";
+				users.erase(users.begin() + i);
+				chans.erase(chans.begin() + i);
 			}
 
 			if (!channel->isMember(main.getFd()))
 			{
 				std::cerr << "Error : you are not on channel " << chans[i] << "." << std::endl;
-				users[i] = "";
-				chans[i] = "";
+				users.erase(users.begin() + i);
+				chans.erase(chans.begin() + i);
 			}
 
 			if (!channel->isOperator(main.getFd()))
 			{
 				std::cerr << "Error : you don't have operator privileges for channel " << chans[i] << "." << std::endl;
-				users[i] = "";
-				chans[i] = "";
+				users.erase(users.begin() + i);
+				chans.erase(chans.begin() + i);
 			}
 		}
 	}
