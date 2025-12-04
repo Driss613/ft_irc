@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:25 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/15 13:22:56 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 11:52:29 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,51 +19,39 @@ Part_cmd::~Part_cmd() {}
 
 void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 {
-	std::vector<std::string> chans;
 	
 	if (str.empty())
 	{
 		std::cerr << "Error : need more params." << std::endl;
 		return ;
 	}
-
-	size_t i = 0;
-	while (i < str.size() && i < str.find(' '))
-	{
-		if (str[i] == ',')
-			i++;
-		std::string chan;
-		while (i < str.size() && str[i] != ' ' && str[i] != ',')
-		{
-			chan += str[i];
-			i++;
-		}
-		chans.push_back(chan);
-	}
-
+	
+	std::istringstream iss(str);
+	std::string chanList;
 	std::string message;
-	if (i < str.size())
-	{
-		i++;
-		while (i < str.size())
-		{
-			message += str[i];
-			i++;
-		}
-	}
 
-	for (size_t j = 0; j < chans.size(); j++)
+	iss >> chanList;
+	std::getline(iss, message);
+	if (!message.empty() && message[0] == ' ')
+	 	message.erase(0, 1);
+
+	if (message.empty())
+		message = "Default";
+
+	std::vector<std::string> chans = buildVector(chanList);
+
+	for (size_t i = 0; i < chans.size(); i++)
 	{
-		Channel *channel = serv.getChannel(chans[j]);
+		Channel *channel = serv.getChannel(chans[i]);
 		if (!channel)
 		{
-			std::cerr << "Error : no such channel as " << chans[j] << "." << std::endl;
-			chans.erase(chans.begin() + j);
+			std::cerr << "Error : no such channel as " << chans[i] << "." << std::endl;
+			chans.erase(chans.begin() + i);
 		}
 		if (!channel->isMember(main.getFd()))
 		{
-			std::cerr << "Error : you are not on channel " << chans[j] << "." << std::endl;
-			chans.erase(chans.begin() + j);
+			std::cerr << "Error : you are not on channel " << chans[i] << "." << std::endl;
+			chans.erase(chans.begin() + i);
 		}
 	}
 

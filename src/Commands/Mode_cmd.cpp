@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/14 15:30:08 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 13:58:36 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,17 @@ Mode_cmd::~Mode_cmd() {}
 void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 {
 	std::string mods = "itkol";
+
+	std::istringstream iss(str);
+
 	std::string chan;
 	std::string mod;
 	std::string param;
-	size_t i = 0;
 
-	while (i < str.find(' ') && i < str.size())
-	{
-		chan += str[i];
-		i++;
-	}
-	i++;
-	while (i < str.size() && str[i] != ' ')
-	{
-		mod += str[i];
-		i++;
-	}
-	i++;
-	while (i < str.size())
-	{
-		param += str[i];
-		i++;
-	}
+	iss >> chan >> mod;
+	std::getline(iss, param);
+	if (!param.empty() && param[0] == ' ')
+	 	param.erase(0, 1);
 
 	if (mod.empty() || mod.size() != 2 || (mod[0] != '+' && mod[0] != '-'))
 	{
@@ -49,7 +38,7 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 		return ;
 	}
 
-	if (mods.find(mod[1]) >= mods.size())
+	if (mods.find(mod[1]) == std::string::npos)
 	{
 		std::cerr << "Error : wrong mode. Try with i, t, k, o or l." << std::endl;
 		return ;
@@ -68,9 +57,11 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 		return ;	
 	}
 
-	// ERR_CHANOPRIVSNEEDED //
-	
-	// ERR_NOCHANMODES //
+	if (!channel->isOperator(main.getFd()))
+	{
+		std::cerr << "Error : you don't have operator privileges for this channel." << std::endl;
+		return ;
+	}
 
 	if (!channel->isMember(main.getFd()))
 	{

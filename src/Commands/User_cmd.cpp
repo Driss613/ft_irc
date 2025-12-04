@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/14 15:40:21 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 10:15:02 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,37 +19,21 @@ User_cmd::~User_cmd() {}
 
 void User_cmd::parsing(std::string str, Server &serv, Client &main)
 {
-	std::vector<Client> clients = serv.getClients();
 	std::string args[4];
-	size_t index = 0;
-	size_t count = 0;
+	std::istringstream iss(str);
+	
+	iss >> args[0] >> args[1] >> args[2];
+	std::getline(iss, args[3]);
+	if (!args[3].empty() && args[3][0] == ' ')
+		args[3].erase(0, 1);
 
-	for (size_t i = 1; i < str.size(); i++)
-	{
-		if (str[i] == ' ' && str[i - 1] != ' ')
-			count++;
-	}
-	if (count < 3)
+	if (args[3].empty())
 	{
 		std::cerr << "Error : need more parameters." << std::endl;
 		return ;
 	}
-
-	for (int i = 0; i < 3; i++)
-	{
-		while (index < str.find(' '))
-		{
-			args[i] += str[index];
-			index++;	
-		}
-		index++;
-	}
-	while (str[index])
-	{
-		args[3] += str[index];
-		index++;
-	}
 	
+	std::vector<Client> clients = serv.getClients();
 	for (size_t i = 0; i < clients.size(); i++)
 	{
 		if (args[0] == clients[i].getUsername())
@@ -67,9 +51,6 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 			return ;
 		}
 	}
-
-	(void)main;
-	(void)serv;
 
 	main.setUsername(args[0]);
 	main.setRank(2);

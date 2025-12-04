@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/14 13:07:03 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 14:02:01 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <csignal>
+#include <sstream>
 #include <poll.h>
 #include <sys/socket.h>
 #include <netinet/in.h> //sockaddr_in

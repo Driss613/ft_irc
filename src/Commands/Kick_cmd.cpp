@@ -6,13 +6,12 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/15 13:22:19 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 14:23:05 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands/Kick_cmd.hpp"
 #include "../../includes/Server.hpp"
-#include <sstream>
 
 Kick_cmd::Kick_cmd() {}
 		
@@ -20,52 +19,28 @@ Kick_cmd::~Kick_cmd() {}
 
 void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 {
-	std::vector<std::string> chans;
-
-	size_t i = 0;
-	while (i < str.size() && i < str.find(' '))
-	{
-		if (str[i] == ',')
-			i++;
-		std::string chan;
-		while (i < str.size() && str[i] != ' ' && str[i] != ',')
-		{
-			chan += str[i];
-			i++;
-		}
-		chans.push_back(chan);
-	}
-
-	std::vector<std::string> users;
-
-	i++;
-	while (i < str.size() && i < str.find(' '))
-	{
-		if (str[i] == ',')
-			i++;
-		std::string user;
-		while (i < str.size() && str[i] != ' ' && str[i] != ',')
-		{
-			user += str[i];
-			i++;
-		}
-		users.push_back(user);
-	}
-
+	std::istringstream iss(str);
+	std::string channels;
+	std::string members;
 	std::string comment;
-	i++;
-	while (i < str.size())
-	{
-		comment += str[i];
-		i++;
-	}
+	
+	iss >> channels >> members;
+	std::getline(iss, comment);
+	if (!comment.empty() && comment[0] == ' ')
+	 	comment.erase(0, 1);
+	if (comment.empty())
+		comment = "Kicked";
 
-	if (users.empty())
+		
+	if (members.empty())
 	{
 		std::cerr << "Error : need more params." << std::endl;
 		return ;
 	}
 	
+	std::vector<std::string> chans = buildVector(channels);
+	std::vector<std::string> users = buildVector(members);
+
 	if (chans.size() != 1 && chans.size() != users.size())
 	{
 		std::cerr << "Error : there must be either one channel or as many channels as users." << std::endl;
@@ -78,7 +53,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 		Channel *channel = serv.getChannel(chans[0]);
 		if (!channel)
 		{
-			std::cerr << "Error : no such channel as " << chans[0] << "." << std::endl;
+			serv.sendMessageToClient(main, "403 " + chans[0] + " :No such channel\r\n");
 			return ;
 		}
 		
@@ -98,7 +73,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			}
 			if (!channel->isMember(client->getFd()))
 			{
-				std::cerr << "Error : user " << users[i] << " is not on channel" << chans[0] << "." << std::endl;
+				serv.sendMessageToClient(main, "441 " + users[i] + " " + chans[0] + " :They aren't on that channel\r\n");
 				users.erase(users.begin() + i);
 			}
 
@@ -110,7 +85,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 
 			if (!channel->isOperator(main.getFd()))
 			{
-				std::cerr << "Error : you don't have operator privileges for this channel." << std::endl;
+				serv.sendMessageToClient(main, "482 " + chans[0] + " :You're not channel operator\r\n");
 				return ;
 			}
 		}
@@ -123,7 +98,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			Channel *channel = serv.getChannel(chans[i]);
 			if (!channel)
 			{
-				std::cerr << "Error : no such channel as " << chans[i] << "." << std::endl;
+				serv.sendMessageToClient(main, "403 " + chans[i] + " :No such channel\r\n");
 				chans.erase(chans.begin() + i);
 			}
 			
@@ -142,7 +117,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			}
 			if (!channel->isMember(client->getFd()))
 			{
-				std::cerr << "Error : user " << users[i] << " is not on channel" << chans[i] << "." << std::endl;
+				serv.sendMessageToClient(main, "441 " + users[i] + " " + chans[i] + " :They aren't on that channel\r\n");
 				users.erase(users.begin() + i);
 				chans.erase(chans.begin() + i);
 			}
@@ -156,7 +131,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 
 			if (!channel->isOperator(main.getFd()))
 			{
-				std::cerr << "Error : you don't have operator privileges for channel " << chans[i] << "." << std::endl;
+				serv.sendMessageToClient(main, "482 " + chans[i] + " :You're not channel operator\r\n");
 				users.erase(users.begin() + i);
 				chans.erase(chans.begin() + i);
 			}
@@ -165,7 +140,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	// ERR_BADCHANMASK //
 
-
+	
 	// std::istringstream iss(str);
 	// std::string channelName, targetNick;
 	// std::string reason;

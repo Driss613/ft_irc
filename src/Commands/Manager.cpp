@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:51:04 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/14 15:00:53 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 12:43:20 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@ Manager::Manager() {}
 
 Manager::~Manager() {}
 
+ACmd *Manager::makePass() {
+	ACmd* com = new Pass_cmd();
+	return com;
+}
+
 ACmd *Manager::makeNick() {
 	ACmd* com = new Nick_cmd();
 	return com;
@@ -23,11 +28,6 @@ ACmd *Manager::makeNick() {
 
 ACmd *Manager::makeUser() {
 	ACmd* com = new User_cmd();
-	return com;
-}
-
-ACmd *Manager::makePass() {
-	ACmd* com = new Pass_cmd();
 	return com;
 }
 
@@ -71,35 +71,37 @@ ACmd *Manager::makePrivmsg() {
 	return com;
 }
 
-ACmd *Manager::makeCmd(std::string name, int rank) {
-	std::string levels[] = {"NICK", "USER", "PASS", "JOIN", "PART", "TOPIC", "INVITE", "KICK", "QUIT", "MODE", "PRIVMSG"};
-	ACmd* (Manager::* functions[])() = {makeNick, makeUser, makePass, makeJoin, makePart, makeTopic, makeInvite, makeKick, makeQuit, makeMode, makePrivmsg};
+ACmd *Manager::makeCmd(std::string name, Client *Client, std::string *args) {
+	std::string levels[] = {"PASS", "NICK", "USER", "JOIN", "PART", "TOPIC", "INVITE", "KICK", "QUIT", "MODE", "PRIVMSG"};
+	ACmd* (Manager::* functions[])() = {makePass, makeNick, makeUser, makeJoin, makePart, makeTopic, makeInvite, makeKick, makeQuit, makeMode, makePrivmsg};
 	
+	int rank = Client->getRank();
+
 	int i = 0;
 	while (levels[i] != name && i < 11)
 		i++;
 
 	if (i == 11)
 	{
-		std::cerr << "Error : please provide one of these commands : NICK, USER, PASS, JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG." << std::endl;
+		std::cerr << "Error : please provide one of these commands : PASS, NICK, USER, JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG." << std::endl;
 		return NULL;
 	}
 	
 	if (rank == 0 && i != 0)
 	{
-		std::cerr << "Error : you must register your nickname first with the command NICK." << std::endl;
+		std::cerr << "Error : you must first provide the server password with the command PASS." << std::endl;
 		return NULL;
 	}
 
 	if (rank == 1 && i != 1)
 	{
-		std::cerr << "Error : you must now register your username with the command USER." << std::endl;
+		std::cerr << "Error : you must now register your nickname with the command NICK." << std::endl;
 		return NULL;
 	}
 
 	if (rank == 2 && i != 2)
 	{
-		std::cerr << "Error : you must now provide the server password with the command PASS." << std::endl;
+		std::cerr << "Error : you must now register your username with the command USER." << std::endl;
 		return NULL;
 	}
 
@@ -107,6 +109,16 @@ ACmd *Manager::makeCmd(std::string name, int rank) {
 	{
 		std::cerr << "Error : you are already registered. Please provide one of these commands : JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG" << std::endl;
 		return NULL;
+	}
+
+	if (i == 3 && *args == "0")
+	{
+		i = 4;
+		std::vector<Channel> Chans = Client->getChannels();
+		*args = "";
+		for (size_t j = 0; j < Chans.size(); i++)
+			*args += Chans[i].getName() + ",";
+		args->resize(args->size() - 1);
 	}
 	
 	ACmd *com = (this->*functions[i])();

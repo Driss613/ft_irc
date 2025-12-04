@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:20:28 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 16:22:53 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 14:10:48 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@
 #include "../Server.hpp"
 
 class ACmd {
-	private:
-		
 	public:
 		ACmd();
 		virtual ~ACmd();
 		virtual void parsing(std::string str, Server &serv, Client &main) = 0;
+		std::vector<std::string> buildVector(std::string str);
 };

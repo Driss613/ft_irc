@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/15 13:42:56 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 13:51:50 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,42 +209,27 @@ void Server::serverInit()
 void Server::parsing(std::string str, int fd)
 {
 	std::string prefix;
+	std::istringstream iss(str);
 	size_t i = 0;
 
 	if (str[0] == ':')
 	{
-		i++;
-		while (str[i] && i < str.find(' '))
-		{
-			prefix += str[i];
-			i++;
-		}
-		if (i == str.find(' '))
-			i++;
+		iss >> prefix;
+		prefix.erase(0, 1);
 	}
 
 	std::string cmd;
-	while (str[i] && str[i] != ' ')
-	{
-		cmd += str[i];
-		i++;
-	}
+	iss >> cmd;
 
-	if (!cmd[0])
+	if (cmd.empty())
 	{
 		std::cerr << "Please provide a command and arguments for your message." << std::endl;
 		return;
 	}
 
 	std::string args;
-	if (str[i] == ' ')
-		i++;
-
-	while (str[i])
-	{
-		args += str[i];
-		i++;
-	}
+	std::getline(iss, args);
+	
 	while (!args.empty() && (args[args.size() - 1] == '\r' ||
 							 args[args.size() - 1] == '\n' ||
 							 args[args.size() - 1] == ' ' ||
@@ -254,9 +239,7 @@ void Server::parsing(std::string str, int fd)
 	}
 
 	while (!args.empty() && (args[0] == ' ' || args[0] == '\t'))
-	{
 		args.erase(0, 1);
-	}
 
 	Client *mainClient = NULL;
 	for (size_t i = 0; i < _clients.size(); i++)
@@ -275,7 +258,7 @@ void Server::parsing(std::string str, int fd)
 	}
 
 	Manager manager;
-	ACmd *com = manager.makeCmd(cmd, mainClient->getRank());
+	ACmd *com = manager.makeCmd(cmd, mainClient, &args);
 
 	if (com)
 	{

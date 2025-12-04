@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:00:34 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/14 15:20:29 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 11:07:57 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,21 @@ Invite_cmd::~Invite_cmd() {}
 
 void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 {
+	std::istringstream iss(str);
 	std::string nick;
 	std::string chan;
-
-	size_t i = 0;
-	while (i < str.size() && i < str.find(' '))
-	{
-		nick += str[i];
-		i++;
-	}
-	i++;
-	while (i < str.size())
-	{
-		chan += str[i];
-		i++;
-	}
+	
+	iss >> nick;
+	std::getline(iss, chan);
+	if (!chan.empty() && chan[0] == ' ')
+	 	chan.erase(0, 1);
 
 	if (chan.empty())
 	{
 		std::cerr << "Error : need more params." << std::endl;
 		return ;
 	}
-
+	
 	std::vector<Client> clients = serv.getClients();
 	Client *client = NULL;
 	
@@ -72,7 +65,7 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 		return ;
 	}
 	
-    if (channel->isInviteOnly() && !channel->isOperator(main.getFd()))
+    if (!channel->isOperator(main.getFd()))
 	{
 		std::cerr << "Error : invite-only channels require operator privileges to invite a new member." << std::endl;
 		return ;
