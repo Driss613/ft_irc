@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/11 20:35:27 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/06 14:41:23 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,83 +19,89 @@ Kick_cmd::~Kick_cmd() {}
 void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 {
 	std::istringstream iss(str);
-	std::string channelName, targetNick;
-	std::string reason;
+	std::string channels;
+	std::string members;
+	std::string comment;
+	
+	iss >> channels >> members;
+	std::getline(iss, comment);
+	if (!comment.empty() && comment[0] == ' ')
+	 	comment.erase(0, 1);
+	if (comment.empty())
+		comment = "Kicked";
 
-	iss >> channelName >> targetNick;
-	std::getline(iss, reason);
-	if (!reason.empty() && reason[0] == ' ')
-		reason.erase(0, 1);
-	if (reason.empty())
-		reason = "Kicked";
-
-	if (channelName.empty() || targetNick.empty())
+		
+	if (members.empty())
 	{
 		std::cerr << "Error : need more params." << std::endl;
-		return;
+		return ;
+	}
+	
+	std::vector<std::string> chans = buildVector(channels);
+	std::vector<std::string> users = buildVector(members);
+
+	if (chans.size() != 1 && chans.size() != users.size())
+	{
+		std::cerr << "Error : there must be either one channel or as many channels as users." << std::endl;
+		return ;
 	}
 
-	Client &sender = serv.getFd(main.getFd());
-	Channel *channel = serv.getChannel(channelName);
-	if (!channel)
+	if (chans.size() == 1)
 	{
-		serv.sendMessageToClient(sender, "403 " + channelName + " :No such channel\r\n");
-		return;
-	}
-
-	if (!channel->isOperator(sender.getFd()))
-	{
-		serv.sendMessageToClient(sender, "482 " + channelName + " :You're not channel operator\r\n");
-		return;
-	}
-
-	Client *target = NULL;
-	std::vector<Client> &clients = serv.getClients();
-	for (size_t i = 0; i < clients.size(); i++)
-	{
-		if (clients[i].getNickname() == targetNick)
+		std::vector<Client> clients = serv.getClients();
+		Channel *channel = serv.getChannel(chans[0]);
+		if (!channel)
 		{
-			target = &clients[i];
-			break;
+			serv.sendMessageToClient(main, "403 " + chans[0] + " :No such channel\r\n");
+			return ;
 		}
-	}
+		
+		for (size_t i = 0; i < users.size(); i++)
+		{
+			Client *client = NULL;
+			
+			for (size_t j = 0; j < clients.size(); j++)
+			{
+				if (users[i] == clients[j].getNickname())
+					client = &serv.getFd(clients[j].getFd());
+			}
+			if (!client)
+			{
+				std::cerr << "Error : user " << users[i] << " is not on the server." << std::endl;
+				users.erase(users.begin() + i);
+			}
+			if (!channel->isMember(client->getFd()))
+			{
+				serv.sendMessageToClient(main, "441 " + users[i] + " " + chans[0] + " :They aren't on that channel\r\n");
+				users.erase(users.begin() + i);
+			}
 
-	if (!target)
-	{
-		serv.sendMessageToClient(sender, "401 " + targetNick + " :No such nick\r\n");
-		return;
-	}
+			if (!channel->isMember(main.getFd()))
+			{
+				std::cerr << "Error : you are not on this channel." << std::endl;
+				return ;
+			}
 
-	if (target->getFd() == sender.getFd())
-	{
-		serv.sendMessageToClient(sender, "484 :You cannot kick yourself\r\n");
-		return;
-	}
+			if (!channel->isOperator(main.getFd()))
+			{
+				serv.sendMessageToClient(main, "482 " + chans[0] + " :You're not channel operator\r\n");
+				return ;
+			}
+			std::string kickMsg = ":" + main.getNickname() + "!" + main.getUsername() +
+								  "@server KICK " + chans[0] + " " + users[i] + " :" + comment + "\r\n";
+			
+				const std::vector<int> &members = channel->getMembers();
+				for (size_t i = 0; i < members.size(); i++)
+				{
+					Client &member = serv.getFd(members[i]);
+					serv.sendMessageToClient(member, kickMsg);
+				}
+			
+				channel->removeMember(client->getFd());
+		} 
 
-	if (!channel->isMember(target->getFd()))
-	{
-		serv.sendMessageToClient(sender, "441 " + targetNick + " " + channelName + " :They aren't on that channel\r\n");
-		return;
-	}
-
-	std::string kickMsg = ":" + sender.getNickname() + "!" + sender.getUsername() +
-						  "@server KICK " + channelName + " " + targetNick + " :" + reason + "\r\n";
-
-	const std::vector<int> &members = channel->getMembers();
-	for (size_t i = 0; i < members.size(); i++)
-	{
-		Client &member = serv.getFd(members[i]);
-		serv.sendMessageToClient(member, kickMsg);
-	}
-
-	channel->removeMember(target->getFd());
 }
 
 // ERR_BADCHANMASK //
 
-// ERR_CHANOPRIVSNEEDED //
-
-// ERR_NOTONCHANNEL //
-
-// Lancer la commande KICK //
-//}
+}

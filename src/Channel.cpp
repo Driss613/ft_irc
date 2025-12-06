@@ -6,11 +6,12 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:23 by lisambet          #+#    #+#             */
-/*   Updated: 2025/10/08 08:57:51 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/06 14:19:00 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
+#include "../includes/Client.hpp"
 
 Channel::Channel(const std::string &name) : _name(name), _topic("") {}
 
@@ -92,15 +93,14 @@ bool Channel::isOperator(int fd) const
 	return false;
 }
 
-Client &Channel::findMember(const std::string &nickname, const std::vector<Client> &clients)
+Client *Channel::findMember(const std::string &nickname, const std::vector<Client *> &clients)
 {
 	for (size_t i = 0; i < clients.size(); i++)
 	{
-		if (clients[i].getNickname() == nickname && isMember(clients[i].getFd()))
-			return const_cast<Client &>(clients[i]);
+		if (clients[i]->getNickname() == nickname && isMember(clients[i]->getFd()))
+			return clients[i];
 	}
-	static Client emptyClient;
-	return emptyClient;
+	return NULL;
 }
 
 void Channel::addInvited(int fd)
