@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:51:40 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/11 20:26:11 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/04 20:10:23 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 	Client &client = serv.getFd(main.getFd());
 	client.setNickname(str);
+	client.setRank(1);
 
 	serv.sendMessageToClient(
 		client,

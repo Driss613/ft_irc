@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:13 by lisambet          #+#    #+#             */
-/*   Updated: 2025/10/08 09:11:15 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/06 14:16:29 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 
 #include <string>
 #include <vector>
-#include "Client.hpp"
 #include "Channel.hpp"
-
+class Client;    
 class Channel
 {
 private:
@@ -37,8 +36,8 @@ public:
 	void addMember(int fd);
 	void removeMember(int fd);
 	bool isMember(int fd) const;
-	Client &findMember(const std::string &nickname, const std::vector<Client> &clients);
-
+	Client *findMember(const std::string &nickname,
+                   const std::vector<Client*> &clients);
 	void addOperator(int fd);
 	void removeOperator(int fd);
 	bool isOperator(int fd) const;

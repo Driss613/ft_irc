@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/11 20:27:28 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/04 19:59:34 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <csignal>
+#include <sstream>
 #include <poll.h>
 #include <sys/socket.h>
 #include <netinet/in.h> //sockaddr_in

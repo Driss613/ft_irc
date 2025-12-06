@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/10/11 20:24:12 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/06 14:08:06 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ std::string Client::getUsername() const
 	return username;
 }
 
+int Client::getRank() const
+{
+	return _rank;
+}
+
+std::vector<Channel> Client::getChannels() const {
+	return _channels;
+}
+
 void Client::setIp(const std::string &ip)
 {
 	_ip = ip;
@@ -74,4 +83,9 @@ void Client::setNickname(std::string str)
 void Client::setUsername(std::string str)
 {
 	username = str;
+}
+
+void Client::setRank(int rank)
+{
+	_rank = rank;
 }

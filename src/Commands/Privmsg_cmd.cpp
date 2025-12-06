@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:51 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/11 20:37:00 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:10:11 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,36 @@ Privmsg_cmd::~Privmsg_cmd() {}
 
 void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 {
-	if (str.empty())
+if (str.empty())
 	{
 		Client &client = serv.getFd(main.getFd());
 		serv.sendMessageToClient(client, "461 PRIVMSG :Not enough parameters\r\n");
 		return;
 	}
-
-	size_t space_pos = str.find(' ');
-	if (space_pos == std::string::npos)
+	
+	std::string target;
+	std::string message;
+	std::istringstream iss(str);
+	
+	iss >> target;
+	std::getline(iss, message);
+	if (!message.empty() && message[0] == ' ')
+	 	message.erase(0, 1);
+	if (!message.empty() && message[0] == ':')
+		message.erase(0, 1);
+	
+	if (message.empty())
 	{
 		Client &client = serv.getFd(main.getFd());
 		serv.sendMessageToClient(client, "412 :No text to send\r\n");
 		return;
 	}
-
-	std::string target = str.substr(0, space_pos);
-	std::string message = str.substr(space_pos + 1);
-
-	if (!message.empty() && message[0] == ':')
-		message.erase(0, 1);
+	
+	std::string nick;
+	size_t pos = std::min(target.find('!'), target.find('@'));
+	pos = std::min(pos, target.find('%'));
+	nick = target.substr(0, pos);
+	
 
 	Client &sender = serv.getFd(main.getFd());
 	std::vector<Client> &clients = serv.getClients();
@@ -72,7 +82,7 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 
 		for (size_t i = 0; i < clients.size(); i++)
 		{
-			if (clients[i].getNickname() == target)
+			if (clients[i].getNickname() == nick)
 			{
 				std::string msg = ":" + sender.getNickname() + "!" + sender.getUsername() + "@server PRIVMSG " + target + " :" + message + "\r\n";
 				serv.sendMessageToClient(const_cast<Client &>(clients[i]), msg);
@@ -82,18 +92,7 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 		}
 
 		if (!found)
-		{
 			serv.sendMessageToClient(sender, "401 " + target + " :No such nick/channel\r\n");
-		}
 	}
-
-	// ERR_CANNOTSENDTOCHAN //
-
-	// ERR_NOTOPLEVEL //
-
-	// ERR_WILDTOPLEVEL //
-
-	// ERR_TOOMANYTARGETS //
-
-	// Lancer la commande PRIVMSG //
+	
 }
