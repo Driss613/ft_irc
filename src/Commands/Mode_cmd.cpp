@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/07 12:30:13 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/06 20:27:25 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,79 +19,54 @@ Mode_cmd::~Mode_cmd() {}
 void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 {
 	std::string mods = "itkol";
-	std::string channel;
+
+	std::istringstream iss(str);
+
+	std::string chan;
 	std::string mod;
 	std::string param;
-	size_t i = 0;
 
-	while (i < str.find(' ') && i < str.size())
-	{
-		channel += str[i];
-		i++;
-	}
-	i++;
-	while (i < str.size() && str[i] != ' ')
-	{
-		mod += str[i];
-		i++;
-	}
-	i++;
-	while (i < str.size())
-	{
-		param += str[i];
-		i++;
-	}
+	iss >> chan >> mod;
+	std::getline(iss, param);
+	if (!param.empty() && param[0] == ' ')
+	 	param.erase(0, 1);
 
 	if (mod.empty() || mod.size() != 2 || (mod[0] != '+' && mod[0] != '-'))
 	{
 		std::cerr << "Error with mod." << std::endl;
-		return;
+		return ;
 	}
 
-	if (mods.find(mod[1]) >= mods.size())
+	if (mods.find(mod[1]) == std::string::npos)
 	{
 		std::cerr << "Error : wrong mode. Try with i, t, k, o or l." << std::endl;
-		return;
+		return ;
 	}
 
 	if ((mod == "+l" || mod[1] == 'k' || mod[1] == 'o') && param.empty())
 	{
 		std::cerr << "Error : need more parameters." << std::endl;
-		return;
+		return ;
 	}
 
-	(void)main;
-	(void)serv;
+	Channel *channel = serv.getChannel(chan);
+	if (!channel)
+	{
+		std::cerr << "Error : no such channel as " << channel << "." << std::endl;
+		return ;	
+	}
 
-	// std::vector<Channel> channels = serv.getChannels();
-	// bool chan_exist = 0;
-	// for (size_t i = 0; i < channels.size(); i++)
-	// {
-	// 	if (channel == channels[i].getChanName())
-	// 		chan_exist = 1;
-	// }
-	// if (!chan_exist)
-	// {
-	// 	std::cerr << "Error : no such channel as " << channel << "." << std::endl;
-	// 	return ;
-	// }
+	if (!channel->isOperator(main.getFd()))
+	{
+		std::cerr << "Error : you don't have operator privileges for this channel." << std::endl;
+		return ;
+	}
 
-	// ERR_CHANOPRIVSNEEDED //
+	if (!channel->isMember(main.getFd()))
+	{
+		std::cerr << "Error : you are not on the channel." << std::endl;
+		return ;
+	}
 
-	// ERR_NOCHANMODES //
-
-	// std::vector<Channel> main_chans = main.getChannels();
-	// bool isonchan = 0;
-	// for (size_t i = 0; i < main_chans.size(); i++)
-	// {
-	// 	if (main_chans[i].getChanName() == channel)
-	// 		isonchan = 1;
-	// }
-	// if (!isonchan)
-	// {
-	// 	std::cerr << "Error : user is not on channel " << channel << "." << std::endl;
-	// 	return ;
-	// }
-
-	// Lancer la commande MODE //
+	
 }

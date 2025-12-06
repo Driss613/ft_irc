@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/07 12:32:44 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/06 20:09:41 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,58 +18,57 @@ Topic_cmd::~Topic_cmd() {}
 
 void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 {
+	std::istringstream iss(str);
 	std::string chan;
 	std::string topic;
 
-	if (str.empty())
+	iss >> chan;
+	std::getline(iss, topic);
+	if (!topic.empty() && topic[0] == ' ')
+	 	topic.erase(0, 1);
+
+	Channel *channel = serv.getChannel(chan);
+	if (!channel)
 	{
-		std::cerr << "Error : need more params." << std::endl;
-		return;
+		std::cerr << "403 : no such channel as " << channel << "." << std::endl;
+		return ;
+	}
+	
+	if (topic.empty())
+	{
+		if (channel->getTopic().empty())
+			{
+				std::cerr << "Channel " << chan << " has no topic." << std::endl;
+				return ;
+			}
 	}
 
-	size_t i = 0;
-	while (i < str.size() && i < str.find(' '))
+	if (!channel->isMember(main.getFd()))
 	{
-		chan += str[i];
-		i++;
+		std::cerr << "442 : you are not on channel " << chan << "." << std::endl;
+		return ;
 	}
-	i++;
-	while (i < str.size())
+	
+	if (!channel->isOperator(main.getFd()))
 	{
-		topic += str[i];
-		i++;
+		std::cerr << "482 : you don't have operator privileges for this channel." << std::endl;
+		return ;
 	}
-	(void)main;
-	(void)serv;
-	// if (topic.empty())
-	// {
-	// 	std::vector<Channel> channels = serv.getChannels();
-	// 	for (size_t i = 0; i < channels.size(); i++)
-	// 	{
-	// 		if (channels[i].getChanName() == chan && channels[i].getChanTopic.empty())
-	// 		{
-	// 			std::cerr << "Error : channel " << chan << " has no topic." << std::endl;
-	// 			return ;
-	// 		}
-	// 	}
-	// }
 
-	// std::vector<Channel> main_chans = main.getChannels();
-	// bool isonchan = 0;
-	// for (size_t i = 0; i < main_chans.size(); i++)
-	// {
-	// 	if (main_chans[i].getChanName() == chan)
-	// 		isonchan = 1;
-	// }
-	// if (!isonchan)
-	// {
-	// 	std::cerr << "Error : you are not on channel " << chan << "." << std::endl;
-	// 	return ;
-	// }
+	//added error codes
 
-	// ERR_CHANOPRIVSNEEDED //
+	channel->setTopic(topic);
+	std::string topicMsg = ":" + main.getNickname() + "!" +
+							  main.getUsername() + "@" + main.getIp() + " TOPIC " + chan;
+			
+			if (!topic.empty())
+				topicMsg += " :" + topic;
+			
+			topicMsg += "\r\n";
 
-	// ERR_NOCHANMODES //
-
-	// Lancer la commande TOPIC //
+			const std::vector<int> &members = channel->getMembers();
+			for (size_t j = 0; j < members.size(); j++)
+			{
+				serv.sendMessageToClient(members[j], topicMsg);
+			}
 }
