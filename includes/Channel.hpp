@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:13 by lisambet          #+#    #+#             */
-/*   Updated: 2025/12/04 14:11:53 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/08 10:26:13 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 #include <string>
 #include <vector>
 #include "Client.hpp"
-#include "Channel.hpp"
+#include "Server.hpp"
+
+class Client;
 
 class Channel
 {

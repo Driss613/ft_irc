@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/04 13:51:50 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/08 10:27:36 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,6 @@ void Server::parsing(std::string str, int fd)
 {
 	std::string prefix;
 	std::istringstream iss(str);
-	size_t i = 0;
 
 	if (str[0] == ':')
 	{

@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:20:28 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 14:10:48 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/08 10:27:22 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 #include "../Client.hpp"
 #include "../Server.hpp"
+
+class Server;
+class Client;
 
 class ACmd {
 	public:

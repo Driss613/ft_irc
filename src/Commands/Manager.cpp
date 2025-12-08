@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:51:04 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 12:43:20 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/08 10:31:44 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ ACmd *Manager::makePrivmsg() {
 
 ACmd *Manager::makeCmd(std::string name, Client *Client, std::string *args) {
 	std::string levels[] = {"PASS", "NICK", "USER", "JOIN", "PART", "TOPIC", "INVITE", "KICK", "QUIT", "MODE", "PRIVMSG"};
-	ACmd* (Manager::* functions[])() = {makePass, makeNick, makeUser, makeJoin, makePart, makeTopic, makeInvite, makeKick, makeQuit, makeMode, makePrivmsg};
+	ACmd* (Manager::* functions[])() = {&Manager::makePass, &Manager::makeNick, &Manager::makeUser, &Manager::makeJoin,
+				&Manager::makePart, &Manager::makeTopic, &Manager::makeInvite, &Manager::makeKick, &Manager::makeQuit, &Manager::makeMode, &Manager::makePrivmsg};
 	
 	int rank = Client->getRank();
 
