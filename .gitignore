@@ -1,6 +1,0 @@
-.build/
-ircserv
-*.o
-*.d
-.vscode/
-.gitignore
