@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:49:29 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/06 20:18:21 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/08 11:04:37 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ class Manager {
 		Manager();
 		~Manager();
 
-		ACmd *makeCmd(std::string name);
+		ACmd *makeCmd(std::string name, Client *Client, std::string *args);
 
+		ACmd *makePass();
 		ACmd *makeNick();
 		ACmd *makeUser();
-		ACmd *makePass();
 		ACmd *makeJoin();
 		ACmd *makePart();
 		ACmd *makeTopic();
