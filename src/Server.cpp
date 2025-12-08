@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/08 11:06:08 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/09/15 15:44:29 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,6 @@ void Server::newData(int fd)
 		std::cout << "Client " << fd << " Data : " << buffer;
 		parsing(std::string(buffer), fd);
 	}
-	(void)fd;
 }
 
 void Server::serverInit()
