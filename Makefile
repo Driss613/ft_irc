@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: drabarza <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/11 15:25:07 by drabarza          #+#    #+#              #
-#    Updated: 2025/09/14 11:34:08 by drabarza         ###   ########.fr        #
+#    Updated: 2025/10/08 09:02:15 by lisambet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,21 @@ CPP := c++
 FLAGS := -Wall -Werror -Wextra -std=c++98
 SRC :=	src/main.cpp\
 		src/Client.cpp\
-		src/Server.cpp
+		src/Server.cpp \
+		src/Channel.cpp \
+		src/Commands/ACmd.cpp \
+		src/Commands/Manager.cpp \
+		src/Commands/Nick_cmd.cpp \
+		src/Commands/Join_cmd.cpp \
+		src/Commands/Kick_cmd.cpp \
+		src/Commands/Invite_cmd.cpp \
+		src/Commands/Mode_cmd.cpp \
+		src/Commands/Part_cmd.cpp \
+		src/Commands/Pass_cmd.cpp \
+		src/Commands/Privmsg_cmd.cpp \
+		src/Commands/Quit_cmd.cpp \
+		src/Commands/Topic_cmd.cpp \
+		src/Commands/User_cmd.cpp
 BUILD := .build
 OBJ := $(SRC:src/%.cpp=$(BUILD)/%.o)
 DEP := $(OBJ:.o=.d)
