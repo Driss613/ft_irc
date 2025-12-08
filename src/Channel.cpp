@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:23 by lisambet          #+#    #+#             */
-/*   Updated: 2025/12/06 14:19:00 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:12:37 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ void Channel::removeKey()
 	_key = "";
 }
 
-// Limit management
 void Channel::setLimit(size_t limit)
 {
 	_limit = limit;
@@ -172,7 +171,6 @@ void Channel::removeLimit()
 	_limit = 0;
 }
 
-// Invite-only mode
 void Channel::setInviteOnly(bool inviteOnly)
 {
 	_inviteOnly = inviteOnly;
@@ -181,4 +179,14 @@ void Channel::setInviteOnly(bool inviteOnly)
 bool Channel::isInviteOnly() const
 {
 	return _inviteOnly;
+}
+
+void Channel::setTopicOnlyOperator(bool topicOnly)
+{
+	_topicOnlyOperator = topicOnly;
+}
+
+bool Channel::getTopicOnlyOperator()
+{
+	return _topicOnlyOperator;
 }

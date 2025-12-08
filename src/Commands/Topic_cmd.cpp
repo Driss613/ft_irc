@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/06 20:09:41 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:21:49 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	Channel *channel = serv.getChannel(chan);
 	if (!channel)
 	{
-		std::cerr << "403 : no such channel as " << channel << "." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : no such channel as " + chan + ".");
 		return ;
 	}
 	
@@ -38,25 +38,29 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		if (channel->getTopic().empty())
 			{
-				std::cerr << "Channel " << chan << " has no topic." << std::endl;
+				serv.sendMessageToClient(main.getFd(), "Error : channel " + chan + " has no topic.");
 				return ;
 			}
 	}
 
 	if (!channel->isMember(main.getFd()))
 	{
-		std::cerr << "442 : you are not on channel " << chan << "." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : you are not on channel " + chan + ".");
 		return ;
 	}
 	
 	if (!channel->isOperator(main.getFd()))
 	{
-		std::cerr << "482 : you don't have operator privileges for this channel." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : you don't have operator privileges for this channel.");
 		return ;
 	}
-
-	//added error codes
-
+	
+	if (!channel->getTopicOnlyOperator())
+	{
+		serv.sendMessageToClient(main.getFd(), "Error : you don't have operator privileges for this channel.");
+		return ;
+	}
+	
 	channel->setTopic(topic);
 	std::string topicMsg = ":" + main.getNickname() + "!" +
 							  main.getUsername() + "@" + main.getIp() + " TOPIC " + chan;

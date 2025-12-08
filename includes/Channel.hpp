@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:13 by lisambet          #+#    #+#             */
-/*   Updated: 2025/12/06 14:16:29 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:11:44 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ private:
 	size_t _limit;
 	bool _inviteOnly;
 	std::vector<int> _invited;
+	bool _topicOnlyOperator;
+
 
 public:
 	Channel(const std::string &name);
@@ -50,6 +52,8 @@ public:
 	size_t getLimit() const;
 	bool hasLimit() const;
 	void removeLimit();
+	void setTopicOnlyOperator(bool topicOnly);
+	bool getTopicOnlyOperator();
 
 	void addInvited(int fd);
 	void removeInvited(int fd);

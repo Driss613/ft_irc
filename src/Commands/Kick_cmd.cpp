@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/08 11:10:17 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:23:23 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,9 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 				{
 					Client &member = serv.getFd(members[i]);
 					serv.sendMessageToClient(member, kickMsg);
-					channel->removeMember(client->getFd()); //delete all users from ome channel
 				}
-				//channel->removeMember(client->getFd());
+				channel->removeMember(client->getFd());
+			
 		} 
 
 }
@@ -146,8 +146,17 @@ else
 				users.erase(users.begin() + i);
 				chans.erase(chans.begin() + i);
 			}
+			std::string kickMsg = ":" + main.getNickname() + "!" + main.getUsername() +
+								  "@server KICK " + chans[i] + " " + users[i] + " :" + comment + "\r\n";
+			
+				const std::vector<int> &memberList = channel->getMembers();
+				for (size_t j = 0; j < memberList.size(); j++)
+				{
+					Client &member = serv.getFd(memberList[j]);
+					serv.sendMessageToClient(member, kickMsg);
+				}
+				channel->removeMember(client->getFd());
 		}
 	}
-// ERR_BADCHANMASK //
 
 }
