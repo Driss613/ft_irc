@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:51 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:48:04 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:57:23 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 if (str.empty())
 	{
 		Client &client = serv.getFd(main.getFd());
-		serv.sendMessageToClient(client, "461 : Not enough parameters\r\n");
+		serv.sendMessageToClient(client, "461 PRIVMSG :Not enough parameters\r\n");
 		return;
 	}
 	

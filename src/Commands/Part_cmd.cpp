@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:25 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:47:31 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:09:39 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 {
 	if (str.empty())
 	{
-		serv.sendMessageToClient(main.getFd(), "461 : need more params." + std::endl);
+		serv.sendMessageToClient(main.getFd(), "461 PART :Need more params.\r\n");
 		return ;
 	}
 	
@@ -43,12 +43,12 @@ void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 		Channel *channel = serv.getChannel(chans[i]);
 		if (!channel)
 		{
-			serv.sendMessageToClient(main.getFd(), "403 : no such channel as " + chans[i] + ".\r\n");
+			serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chans[i] + ".\r\n");
 			chans.erase(chans.begin() + i);
 		}
 		if (!channel->isMember(main.getFd()))
 		{
-			serv.sendMessageToClient(main.getFd(), "442 : you are not on channel " + chans[i] + ".\r\n");
+			serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chans[i] + ".\r\n");
 			chans.erase(chans.begin() + i);
 		}
 		std::string partMsg = ":" + main.getNickname() + "!" +

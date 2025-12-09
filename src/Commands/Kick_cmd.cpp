@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:49:57 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:03:39 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 		
 	if (members.empty())
 	{
-		serv.sendMessageToClient(main.getFd(), "461 : need more params.\r\n");
+		serv.sendMessageToClient(main.getFd(), "461 KICK :Need more params.\r\n");
 		return ;
 	}
 	
@@ -42,7 +42,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (chans.size() != 1 && chans.size() != users.size())
 	{
-		serv.sendMessageToClient(main.getFd(), "461 : there must be either one channel or as many channels as users.\r\n");
+		serv.sendMessageToClient(main.getFd(), "461 KICK :There must be either one channel or as many channels as users.\r\n");
 		return ;
 	}
 
@@ -67,7 +67,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			}
 			if (!client)
 			{
-				serv.sendMessageToClient(main.getFd(), "401 : user " + users[i] + " is not on the server.\r\n");
+				serv.sendMessageToClient(main.getFd(), "401 :User " + users[i] + " is not on the server.\r\n");
 				users.erase(users.begin() + i);
 			}
 			if (!channel->isMember(client->getFd()))
@@ -78,7 +78,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 
 			if (!channel->isMember(main.getFd()))
 			{
-				serv.sendMessageToClient(main.getFd(), "442 : you are not on this channel.\r\n");
+				serv.sendMessageToClient(main.getFd(), "442 :You are not on this channel.\r\n");
 				return ;
 			}
 
@@ -122,7 +122,7 @@ else
 			}
 			if (!client)
 			{
-				serv.sendMessageToClient(main.getFd(), "401 : user " + users[i] + " is not on the server.\r\n");
+				serv.sendMessageToClient(main.getFd(), "401 :User " + users[i] + " is not on the server.\r\n");
 				users.erase(users.begin() + i);
 				chans.erase(chans.begin() + i);
 			}
@@ -135,7 +135,7 @@ else
 
 			if (!channel->isMember(main.getFd()))
 			{
-				serv.sendMessageToClient(main.getFd(), "442 : you are not on channel " + chans[i] + ".\r\n");
+				serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chans[i] + ".\r\n");
 				users.erase(users.begin() + i);
 				chans.erase(chans.begin() + i);
 			}

@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/09 13:39:15 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:08:08 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void Server::parsing(std::string str, int fd)
 
 	if (cmd.empty())
 	{
-		serv.sendMessageToClient(fd, "Please provide a command and arguments for your message.\r\n");
+		std::cerr << "Please provide a command and arguments for your message." << std::endl;
 		return;
 	}
 
@@ -257,7 +257,7 @@ void Server::parsing(std::string str, int fd)
 
 	if (!mainClient)
 	{
-		serv.sendMessageToClient(fd, "Error: Client not found\r\n");
+		std::cerr << "Error: Client not found" << std::endl;
 		return;
 	}
 

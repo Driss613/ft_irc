@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:51:04 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:35:27 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:09:13 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,31 +85,31 @@ ACmd *Manager::makeCmd(std::string name, Client *Client, std::string *args) {
 
 	if (i == 11)
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : please provide one of these commands : PASS, NICK, USER, JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG.\r\n");
+		std::cerr << "Error : please provide one of these commands : PASS, NICK, USER, JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG." << std::endl;
 		return NULL;
 	}
 	
 	if (rank == 0 && i != 0)
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : you must first provide the server password with the command PASS.\r\n");
+		std::cerr << "Error : you must first provide the server password with the command PASS." << std::endl;
 		return NULL;
 	}
 
 	if (rank == 1 && i != 1)
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : you must now register your nickname with the command NICK." + std::endl);
+		std::cerr << "Error : you must now register your nickname with the command NICK." << std::endl;
 		return NULL;
 	}
 
 	if (rank == 2 && i != 2)
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : you must now register your username with the command USER.\r\n");
+		std::cerr << "Error : you must now register your username with the command USER." << std::endl;
 		return NULL;
 	}
 
 	if (rank == 3 && i < 3)
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : you are already registered. Please provide one of these commands : JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG\r\n");
+		std::cerr << "Error : you are already registered. Please provide one of these commands : JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG" << std::endl;
 		return NULL;
 	}
 

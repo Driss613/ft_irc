@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:00:34 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:44:06 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:59:26 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (chan.empty())
 	{
-		serv.sendMessageToClient(main.getFd(), "461 : need more params.\r\n");
+		serv.sendMessageToClient(main.getFd(), "461 INVITE :Need more params.\r\n");
 		return;
 	}
 	
@@ -43,7 +43,7 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 	if (!client)
 	{
-		serv.sendMessageToClient(main.getFd(), "401 : no such client on the server.\r\n");
+		serv.sendMessageToClient(main.getFd(), "401 :No such client on the server.\r\n");
 		return ;
 	}
 
@@ -54,13 +54,13 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 		
 	if (!channel->isMember(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "442 : you are not on channel " + chan + ".\r\n");
+		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".\r\n");
 		return ;
 	}
 	
 	if (channel->isMember(fd))
 	{
-		serv.sendMessageToClient(main.getFd(), "443 : user is already on the channel.\r\n");
+		serv.sendMessageToClient(main.getFd(), "443 :is already on the channel.\r\n");
 		return ;
 	}
 	
