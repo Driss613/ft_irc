@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/08 14:26:08 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:46:24 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,38 +33,38 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (mod.empty() || mod.size() != 2 || (mod[0] != '+' && mod[0] != '-'))
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : wrong mode. Try with i, t, k, o or l.\r\n");
+		serv.sendMessageToClient(main.getFd(), "472 : wrong mode. Try with i, t, k, o or l.\r\n");
 		return ;
 	}
 
 	if (mods.find(mod[1]) == std::string::npos)
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : wrong mode. Try with i, t, k, o or l.\r\n");
+		serv.sendMessageToClient(main.getFd(), "472 : wrong mode. Try with i, t, k, o or l.\r\n");
 		return ;
 	}
 
 	if ((mod == "+l" || mod[1] == 'k' || mod[1] == 'o') && param.empty())
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : need more parameters.\r\n");
+		serv.sendMessageToClient(main.getFd(), "461 : need more parameters.\r\n");
 		return ;
 	}
 
 	Channel *channel = serv.getChannel(chan);
 	if (!channel)
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : no such channel as " + chan + ".\r\n");
+		serv.sendMessageToClient(main.getFd(), "403 : no such channel as " + chan + ".\r\n");
 		return ;
 	}
 
 	if (!channel->isOperator(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : you don't have operator privileges for this channel.\r\n");
+		serv.sendMessageToClient(main.getFd(), "482 : you don't have operator privileges for this channel.\r\n");
 		return ;
 	}
 
 	if (!channel->isMember(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : you are not on the channel.\r\n");
+		serv.sendMessageToClient(main.getFd(), "442 : you are not on the channel.\r\n");
 		return ;
 	}
 	switch (mod[1])
@@ -101,7 +101,7 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 				}
 				if (!client || !channel->isMember(client->getFd()))
 				{
-					serv.sendMessageToClient(main.getFd(), "Error : user " + param + " is not on the channel.\r\n");
+					serv.sendMessageToClient(main.getFd(), "441 : user " + param + " is not on the channel.\r\n");
 					return ;
 				}
 				if (mod[0] == '+')

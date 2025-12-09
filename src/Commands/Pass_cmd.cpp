@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:06:49 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:36:30 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:47:44 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ void Pass_cmd::parsing(std::string str, Server &serv, Client &main)
 				main.getNickname() + "!" + main.getUsername() + "@" + main.getIp() + "\r\n");
 	}
 	else
-		serv.sendMessageToClient(main.getFd(), "Error : wrong password.\r\n");
+		serv.sendMessageToClient(main.getFd(), "464 : wrong password.\r\n");
 }

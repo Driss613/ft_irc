@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:00:34 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:33:10 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:44:06 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (chan.empty())
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : need more params.\r\n");
+		serv.sendMessageToClient(main.getFd(), "461 : need more params.\r\n");
 		return;
 	}
 	
@@ -43,7 +43,7 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 	if (!client)
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : no such client on the server.\r\n");
+		serv.sendMessageToClient(main.getFd(), "401 : no such client on the server.\r\n");
 		return ;
 	}
 
@@ -54,19 +54,19 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 		
 	if (!channel->isMember(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : you are not on channel " + chan + ".\r\n");
+		serv.sendMessageToClient(main.getFd(), "442 : you are not on channel " + chan + ".\r\n");
 		return ;
 	}
 	
 	if (channel->isMember(fd))
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : user is already on the channel.\r\n");
+		serv.sendMessageToClient(main.getFd(), "443 : user is already on the channel.\r\n");
 		return ;
 	}
 	
     if (!channel->isOperator(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : invite-only channels require operator privileges to invite a new member.\r\n");
+		serv.sendMessageToClient(main.getFd(), "482 : invite-only channels require operator privileges to invite a new member.\r\n");
 		return ;
 	}
 	

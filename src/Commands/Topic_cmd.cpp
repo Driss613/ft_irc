@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:30:31 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:48:46 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		if (channel->getTopic().empty())
 			{
-				serv.sendMessageToClient(main.getFd(), "Error : channel " + chan + " has no topic.");
+				serv.sendMessageToClient(main.getFd(), "331 : channel " + chan + " has no topic.");
 				return ;
 			}
 	}
@@ -57,7 +57,7 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	
 	if (!channel->getTopicOnlyOperator())
 	{
-		serv.sendMessageToClient(main.getFd(), "Error : you don't have operator privileges for this channel.");
+		serv.sendMessageToClient(main.getFd(), "482 : you don't have operator privileges for this channel.");
 		return ;
 	}
 	
