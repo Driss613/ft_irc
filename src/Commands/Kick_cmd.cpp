@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/08 14:23:23 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:37:58 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 		
 	if (members.empty())
 	{
-		std::cerr << "Error : need more params." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : need more params.\r\n");
 		return ;
 	}
 	
@@ -42,7 +42,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (chans.size() != 1 && chans.size() != users.size())
 	{
-		std::cerr << "Error : there must be either one channel or as many channels as users." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : there must be either one channel or as many channels as users.\r\n");
 		return ;
 	}
 
@@ -67,7 +67,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			}
 			if (!client)
 			{
-				std::cerr << "Error : user " << users[i] << " is not on the server." << std::endl;
+				serv.sendMessageToClient(main.getFd(), "Error : user " + users[i] + " is not on the server.\r\n");
 				users.erase(users.begin() + i);
 			}
 			if (!channel->isMember(client->getFd()))
@@ -78,7 +78,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 
 			if (!channel->isMember(main.getFd()))
 			{
-				std::cerr << "Error : you are not on this channel." << std::endl;
+				serv.sendMessageToClient(main.getFd(), "Error : you are not on this channel.\r\n");
 				return ;
 			}
 
@@ -122,7 +122,7 @@ else
 			}
 			if (!client)
 			{
-				std::cerr << "Error : user " << users[i] << " is not on the server." << std::endl;
+				serv.sendMessageToClient(main.getFd(), "Error : user " + users[i] + " is not on the server.\r\n");
 				users.erase(users.begin() + i);
 				chans.erase(chans.begin() + i);
 			}
@@ -135,7 +135,7 @@ else
 
 			if (!channel->isMember(main.getFd()))
 			{
-				std::cerr << "Error : you are not on channel " << chans[i] << "." << std::endl;
+				serv.sendMessageToClient(main.getFd(), "Error : you are not on channel " + chans[i] + ".\r\n");
 				users.erase(users.begin() + i);
 				chans.erase(chans.begin() + i);
 			}

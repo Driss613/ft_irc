@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:54:26 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 19:57:44 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:33:37 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 		 
 	if (chanList.empty())
 	{
-		std::cerr << "Error : need more params." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : need more params.\r\n");
 		return;
 	}
 	

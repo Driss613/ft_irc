@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:00:34 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/06 20:26:40 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:33:10 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (chan.empty())
 	{
-		std::cerr << "Error : need more params." << std::endl;
-		return ;
+		serv.sendMessageToClient(main.getFd(), "Error : need more params.\r\n");
+		return;
 	}
 	
 	std::vector<Client> clients = serv.getClients();
@@ -43,7 +43,7 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 	if (!client)
 	{
-		std::cerr << "Error : no such client on the server." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : no such client on the server.\r\n");
 		return ;
 	}
 
@@ -54,19 +54,19 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 		
 	if (!channel->isMember(main.getFd()))
 	{
-		std::cerr << "Error : you are not on channel " << chan << "." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : you are not on channel " + chan + ".\r\n");
 		return ;
 	}
 	
 	if (channel->isMember(fd))
 	{
-		std::cerr << "Error : user is already on the channel." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : user is already on the channel.\r\n");
 		return ;
 	}
 	
     if (!channel->isOperator(main.getFd()))
 	{
-		std::cerr << "Error : invite-only channels require operator privileges to invite a new member." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : invite-only channels require operator privileges to invite a new member.\r\n");
 		return ;
 	}
 	

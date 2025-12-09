@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/06 20:13:24 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:37:15 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (args[3].empty())
 	{
-		std::cerr << "Error : need more parameters." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "Error : need more parameters." + std::endl);
 		return ;
 	}
 	
@@ -37,7 +37,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		if (args[0] == clients[i].getUsername())
 		{
-			std::cerr << "Error : username unavailable." << std::endl;
+			serv.sendMessageToClient(main.getFd(), "Error : username unavailable." + std::endl);
 			return ;
 		}
 	}
@@ -46,7 +46,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		if (args[1][i] < '0' || args[1][i] > '9')
 		{
-			std::cerr << "Error : usermod should be a numeric." << std::endl;
+			serv.sendMessageToClient(main.getFd(), "Error : usermod should be a numeric.\r\n");
 			return ;
 		}
 	}
