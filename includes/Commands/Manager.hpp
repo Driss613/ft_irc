@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:49:29 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/08 11:04:37 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/10 09:56:38 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Manager {
 		Manager();
 		~Manager();
 
-		ACmd *makeCmd(std::string name, Client *Client, std::string *args);
+		ACmd *makeCmd(std::string name, Client *Client, std::string *args, Server &serv);
 
 		ACmd *makePass();
 		ACmd *makeNick();

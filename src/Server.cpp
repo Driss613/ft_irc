@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/09 14:08:08 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/10 09:57:13 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ void Server::parsing(std::string str, int fd)
 	}
 
 	Manager manager;
-	ACmd *com = manager.makeCmd(cmd, mainClient, &args);
+	ACmd *com = manager.makeCmd(cmd, mainClient, &args, *this);
 
 	if (com)
 	{
