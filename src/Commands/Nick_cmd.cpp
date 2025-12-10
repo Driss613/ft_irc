@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:51:40 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 20:10:23 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:04:41 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (str.empty())
 	{
-		std::cerr << "Error : no nickname given." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "431 :No nickname given.\r\n");
 		return;
 	}
 	if (str.size() > 9)
 	{
-		std::cerr << "Error : please enter a nickname of maximum 9 characters." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "432 :Please enter a nickname of maximum 9 characters.\r\n");
 		return;
 	}
 
@@ -36,7 +36,7 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		if (str == clients[i].getNickname())
 		{
-			std::cerr << "Error : nickname unavailable." << std::endl;
+			serv.sendMessageToClient(main.getFd(), "433 :Nickname unavailable.\r\n");
 			return;
 		}
 	}

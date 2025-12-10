@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:51 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/06 15:10:11 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/09 13:57:23 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ if (str.empty())
 	if (message.empty())
 	{
 		Client &client = serv.getFd(main.getFd());
-		serv.sendMessageToClient(client, "412 :No text to send\r\n");
+		serv.sendMessageToClient(client, "412 : No text to send\r\n");
 		return;
 	}
 	

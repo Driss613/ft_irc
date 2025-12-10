@@ -6,12 +6,12 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:51:04 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/08 11:04:07 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/10 10:01:00 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands/Manager.hpp"
-
+#include "../../includes/Server.hpp"
 
 Manager::Manager() {}
 
@@ -72,7 +72,7 @@ ACmd *Manager::makePrivmsg() {
 	return com;
 }
 
-ACmd *Manager::makeCmd(std::string name, Client *Client, std::string *args) {
+ACmd *Manager::makeCmd(std::string name, Client *Client, std::string *args, Server &serv) {
 	std::string levels[] = {"PASS", "NICK", "USER", "JOIN", "PART", "TOPIC", "INVITE", "KICK", "QUIT", "MODE", "PRIVMSG"};
 	ACmd* (Manager::* functions[])() = {&Manager::makePass, &Manager::makeNick, &Manager::makeUser, &Manager::makeJoin,
 				&Manager::makePart, &Manager::makeTopic, &Manager::makeInvite, &Manager::makeKick, &Manager::makeQuit, &Manager::makeMode, &Manager::makePrivmsg};
@@ -85,31 +85,31 @@ ACmd *Manager::makeCmd(std::string name, Client *Client, std::string *args) {
 
 	if (i == 11)
 	{
-		std::cerr << "Error : please provide one of these commands : PASS, NICK, USER, JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG." << std::endl;
+		serv.sendMessageToClient(Client->getFd(), "421 :Please provide one of these commands : PASS, NICK, USER, JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG.\r\n");
 		return NULL;
 	}
 	
 	if (rank == 0 && i != 0)
 	{
-		std::cerr << "Error : you must first provide the server password with the command PASS." << std::endl;
+		serv.sendMessageToClient(Client->getFd(), "461 :You must first provide the server password with the command PASS.\r\n");
 		return NULL;
 	}
 
 	if (rank == 1 && i != 1)
 	{
-		std::cerr << "Error : you must now register your nickname with the command NICK." << std::endl;
+		serv.sendMessageToClient(Client->getFd(), "461 :You must now register your nickname with the command NICK.\r\n");
 		return NULL;
 	}
 
 	if (rank == 2 && i != 2)
 	{
-		std::cerr << "Error : you must now register your username with the command USER." << std::endl;
+		serv.sendMessageToClient(Client->getFd(), "461 :You must now register your username with the command USER.\r\n");
 		return NULL;
 	}
 
 	if (rank == 3 && i < 3)
 	{
-		std::cerr << "Error : you are already registered. Please provide one of these commands : JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG" << std::endl;
+		serv.sendMessageToClient(Client->getFd(), "461 :You are already registered. Please provide one of these commands : JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG.\r\n");
 		return NULL;
 	}
 
