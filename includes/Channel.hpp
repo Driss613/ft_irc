@@ -30,7 +30,6 @@ private:
 	std::vector<int> _invited;
 	bool _topicOnlyOperator;
 
-
 public:
 	Channel(const std::string &name);
 	~Channel();
