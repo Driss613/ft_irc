@@ -12,11 +12,11 @@
 
 #include "../includes/Client.hpp"
 
-Client::Client() : _ip(""), _fd(-1)
+Client::Client() : _ip(""), _fd(-1), _rank(0)
 {
 }
 
-Client::Client(const Client &cpy) : _ip(cpy._ip), _fd(cpy._fd), username(cpy.username), nickname(cpy.nickname)
+Client::Client(const Client &cpy) : _ip(cpy._ip), _fd(cpy._fd), _rank(cpy._rank), username(cpy.username), nickname(cpy.nickname)
 {
 }
 
@@ -32,6 +32,7 @@ Client &Client::operator=(const Client &rhs)
 		_fd = rhs._fd;
 		nickname = rhs.nickname;
 		username = rhs.username;
+		_rank = rhs._rank;
 	}
 	return *this;
 }
