@@ -42,7 +42,7 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 	Client &client = serv.getFd(main.getFd());
 	client.setNickname(str);
-	client.setRank(1);
+	client.setRank(2);
 
 	serv.sendMessageToClient(
 		client,

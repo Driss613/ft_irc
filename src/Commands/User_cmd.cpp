@@ -52,7 +52,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 
 	main.setUsername(args[0]);
-	main.setRank(2);
+	main.setRank(3);
 	serv.sendMessageToClient(
 		main,
 		":irc.example.com " + main.getNickname() + " :USER command received, waiting for PASS command\r\n");
