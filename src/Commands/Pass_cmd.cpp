@@ -21,7 +21,7 @@ void Pass_cmd::parsing(std::string str, Server &serv, Client &main)
 {
 	if (str == serv.getpasswd())
 	{
-		main.setRank(3);
+		main.setRank(1);
 		serv.sendMessageToClient(
 			main,
 			":irc.example.com 001 " + main.getNickname() +

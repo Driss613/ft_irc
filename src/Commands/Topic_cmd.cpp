@@ -33,7 +33,6 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".");
 		return ;
 	}
-	
 	if (topic.empty())
 	{
 		if (channel->getTopic().empty())
@@ -60,7 +59,6 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.");
 		return ;
 	}
-	
 	channel->setTopic(topic);
 	std::string topicMsg = ":" + main.getNickname() + "!" +
 							  main.getUsername() + "@" + main.getIp() + " TOPIC " + chan;

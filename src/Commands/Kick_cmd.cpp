@@ -36,7 +36,6 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 		serv.sendMessageToClient(main.getFd(), "461 KICK :Need more params.\r\n");
 		return ;
 	}
-	
 	std::vector<std::string> chans = buildVector(channels);
 	std::vector<std::string> users = buildVector(members);
 
@@ -69,6 +68,7 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 			{
 				serv.sendMessageToClient(main.getFd(), "401 :User " + users[i] + " is not on the server.\r\n");
 				users.erase(users.begin() + i);
+				break;	//Driss a voir pour eviter un segfault
 			}
 			if (!channel->isMember(client->getFd()))
 			{
