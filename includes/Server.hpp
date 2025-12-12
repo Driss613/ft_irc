@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/08 10:27:08 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/10 12:01:51 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <netinet/in.h> //sockaddr_in
 #include <fcntl.h>
 #include <arpa/inet.h> //inet_ntoa
+#include <cstdlib>
 
 #include "Client.hpp"
 #include "Channel.hpp"

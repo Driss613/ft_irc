@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:51 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 13:59:13 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/10 13:35:29 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include "../../includes/Server.hpp"
 
 Privmsg_cmd::Privmsg_cmd() {}
-		
+
 Privmsg_cmd::~Privmsg_cmd() {}
 
 void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 {
-	if (str.empty())
+if (str.empty())
 	{
 		Client &client = serv.getFd(main.getFd());
 		serv.sendMessageToClient(client, "461 PRIVMSG :Not enough parameters\r\n");
@@ -40,7 +40,7 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (message.empty())
 	{
 		Client &client = serv.getFd(main.getFd());
-		serv.sendMessageToClient(client, "412 :No text to send\r\n");
+		serv.sendMessageToClient(client, "412 : No text to send\r\n");
 		return;
 	}
 	
@@ -95,6 +95,4 @@ void Privmsg_cmd::parsing(std::string str, Server &serv, Client &main)
 		if (!found)
 			serv.sendMessageToClient(sender, "401 " + target + " :No such nick/channel\r\n");
 	}
-	
-	// Lancer la commande PRIVMSG //
 }

@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:06:49 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 11:54:01 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/10 13:43:28 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ Pass_cmd::Pass_cmd() {}
 		
 Pass_cmd::~Pass_cmd() {}
 
-void Pass_cmd::parsing(std::string str, Server &serv, Client &main) {
+void Pass_cmd::parsing(std::string str, Server &serv, Client &main)
+{
 	if (str == serv.getpasswd())
 	{
-		main.setRank(3);
+		main.setRank(1);
 		serv.sendMessageToClient(
 			main,
 			":irc.example.com 001 " + main.getNickname() +
@@ -28,5 +29,5 @@ void Pass_cmd::parsing(std::string str, Server &serv, Client &main) {
 				main.getNickname() + "!" + main.getUsername() + "@" + main.getIp() + "\r\n");
 	}
 	else
-		std::cerr << "Error : wrong password." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "464 :Password incorrect.\r\n");
 }

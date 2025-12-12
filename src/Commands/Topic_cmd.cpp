@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 13:59:25 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/10 13:10:55 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/Server.hpp"
 
 Topic_cmd::Topic_cmd() {}
-		
+
 Topic_cmd::~Topic_cmd() {}
 
 void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
@@ -31,30 +31,43 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	Channel *channel = serv.getChannel(chan);
 	if (!channel)
 	{
-		std::cerr << "Error : no such channel as " << channel << "." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".");
 		return ;
 	}
 	
 	if (topic.empty())
 	{
 		if (channel->getTopic().empty())
-			{
-				std::cerr << "Channel " << chan << " has no topic." << std::endl;
-				return ;
-			}
+		{
+			serv.sendMessageToClient(main.getFd(), "331 :Channel " + chan + " has no topic.");
+			return ;
+		}
 	}
 
 	if (!channel->isMember(main.getFd()))
 	{
-		std::cerr << "Error : you are not on channel " << chan << "." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".");
 		return ;
 	}
 	
-	if (!channel->isOperator(main.getFd()))
+	if (channel->getTopicOnlyOperator() && !channel->isOperator(main.getFd()))
 	{
-		std::cerr << "Error : you don't have operator privileges for this channel." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.");
 		return ;
 	}
+	
+	channel->setTopic(topic);
+	std::string topicMsg = ":" + main.getNickname() + "!" +
+							  main.getUsername() + "@" + main.getIp() + " TOPIC " + chan;
+			
+	if (!topic.empty())
+		topicMsg += " :" + topic;
+	
+	topicMsg += "\r\n";
 
-	// Lancer la commande TOPIC //
+	const std::vector<int> &members = channel->getMembers();
+	for (size_t j = 0; j < members.size(); j++)
+	{
+		serv.sendMessageToClient(members[j], topicMsg);
+	}
 }

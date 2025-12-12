@@ -6,12 +6,11 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:00:34 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 11:07:57 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/10 13:36:44 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands/Invite_cmd.hpp"
-#include "../../includes/Server.hpp"
 
 Invite_cmd::Invite_cmd() {}
 		
@@ -30,8 +29,8 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (chan.empty())
 	{
-		std::cerr << "Error : need more params." << std::endl;
-		return ;
+		serv.sendMessageToClient(main.getFd(), "461 INVITE :Need more params.\r\n");
+		return;
 	}
 	
 	std::vector<Client> clients = serv.getClients();
@@ -44,7 +43,7 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 	if (!client)
 	{
-		std::cerr << "Error : no such client on the server." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "401 :No such client on the server.\r\n");
 		return ;
 	}
 
@@ -55,21 +54,27 @@ void Invite_cmd::parsing(std::string str, Server &serv, Client &main)
 		
 	if (!channel->isMember(main.getFd()))
 	{
-		std::cerr << "Error : you are not on channel " << chan << "." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".\r\n");
 		return ;
 	}
 	
 	if (channel->isMember(fd))
 	{
-		std::cerr << "Error : user is already on the channel." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "443 :is already on the channel.\r\n");
 		return ;
 	}
 	
     if (!channel->isOperator(main.getFd()))
 	{
-		std::cerr << "Error : invite-only channels require operator privileges to invite a new member." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "482 : invite-only channels require operator privileges to invite a new member.\r\n");
 		return ;
 	}
-
-	// Lancer la commande INVITE //
+	
+	channel->addInvited(fd);
+	std::string inviteMsg = ":" + main.getNickname() + "!" +
+							  main.getUsername() + "@" + main.getIp() + " INVITE " + nick + " " + chan + "\r\n";
+	serv.sendMessageToClient(fd, inviteMsg);
+	serv.sendMessageToClient(main.getFd(),
+							 ":" + main.getNickname() + "!" + main.getUsername() + "@server NOTICE " + main.getNickname() +
+								 " :You have invited " + nick + " to join " + chan + "\r\n");
 }

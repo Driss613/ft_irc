@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:23 by lisambet          #+#    #+#             */
-/*   Updated: 2025/10/14 15:51:54 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/10 12:00:32 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void Channel::addOperator(int fd)
 	if (!isOperator(fd))
 		_operators.push_back(fd);
 }
-
 void Channel::removeOperator(int fd)
 {
 	for (size_t i = 0; i < _operators.size(); i++)
@@ -83,7 +82,6 @@ void Channel::removeOperator(int fd)
 		}
 	}
 }
-
 bool Channel::isOperator(int fd) const
 {
 	for (size_t i = 0; i < _operators.size(); i++)
@@ -94,15 +92,14 @@ bool Channel::isOperator(int fd) const
 	return false;
 }
 
-Client &Channel::findMember(const std::string &nickname, const std::vector<Client> &clients)
+Client *Channel::findMember(const std::string &nickname, const std::vector<Client *> &clients)
 {
 	for (size_t i = 0; i < clients.size(); i++)
 	{
-		if (clients[i].getNickname() == nickname && isMember(clients[i].getFd()))
-			return const_cast<Client &>(clients[i]);
+		if (clients[i]->getNickname() == nickname && isMember(clients[i]->getFd()))
+			return clients[i];
 	}
-	static Client emptyClient;
-	return emptyClient;
+	return NULL;
 }
 
 void Channel::addInvited(int fd)
@@ -153,7 +150,6 @@ void Channel::removeKey()
 	_key = "";
 }
 
-// Limit management
 void Channel::setLimit(size_t limit)
 {
 	_limit = limit;
@@ -174,7 +170,6 @@ void Channel::removeLimit()
 	_limit = 0;
 }
 
-// Invite-only mode
 void Channel::setInviteOnly(bool inviteOnly)
 {
 	_inviteOnly = inviteOnly;
@@ -183,4 +178,14 @@ void Channel::setInviteOnly(bool inviteOnly)
 bool Channel::isInviteOnly() const
 {
 	return _inviteOnly;
+}
+
+void Channel::setTopicOnlyOperator(bool topicOnly)
+{
+	_topicOnlyOperator = topicOnly;
+}
+
+bool Channel::getTopicOnlyOperator()
+{
+	return _topicOnlyOperator;
 }
