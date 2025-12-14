@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Topic_cmd.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 14:05:48 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:35:42 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,33 +30,33 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	Channel *channel = serv.getChannel(chan);
 	if (!channel)
 	{
-		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".");
+		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".\r\n");
 		return ;
 	}
 	if (topic.empty())
 	{
 		if (channel->getTopic().empty())
 			{
-				serv.sendMessageToClient(main.getFd(), "331 :Channel " + chan + " has no topic.");
+				serv.sendMessageToClient(main.getFd(), "331 :Channel " + chan + " has no topic.\r\n");
 				return ;
 			}
 	}
 
 	if (!channel->isMember(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".");
+		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".\r\n");
 		return ;
 	}
 	
 	if (!channel->isOperator(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.");
+		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.\r\n");
 		return ;
 	}
 	
 	if (!channel->getTopicOnlyOperator())
 	{
-		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.");
+		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.\r\n");
 		return ;
 	}
 	channel->setTopic(topic);
