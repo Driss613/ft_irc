@@ -6,14 +6,14 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:23 by lisambet          #+#    #+#             */
-/*   Updated: 2025/12/10 12:00:32 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/15 10:49:07 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
 #include "../includes/Client.hpp"
 
-Channel::Channel(const std::string &name) : _name(name), _topic(""), _limit(0), _inviteOnly(0), _topicOnlyOperator(0) {}
+Channel::Channel(const std::string &name) : _name(name), _topic(""), _limit(0), _inviteOnly(0), _topicOnlyOperator(1) {}
 
 Channel::~Channel() {}
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 14:04:14 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/15 10:55:55 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 				}
 				if (mod[0] == '+' && !channel->isOperator(client->getFd()))
 					channel->addOperator(client->getFd());
-				else if (mod[0] == '-' && channel->isOperator(client->getFd()))
+				else if (mod[0] == '-' && channel->isOperator(client->getFd()) )
 					channel->removeOperator(client->getFd());
 			}
 			break;

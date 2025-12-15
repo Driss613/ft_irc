@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Topic_cmd.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/10 13:10:55 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/15 10:52:40 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	Channel *channel = serv.getChannel(chan);
 	if (!channel)
 	{
-		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".");
+		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".\r\n");
 		return ;
 	}
 	
@@ -39,20 +39,20 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		if (channel->getTopic().empty())
 		{
-			serv.sendMessageToClient(main.getFd(), "331 :Channel " + chan + " has no topic.");
+			serv.sendMessageToClient(main.getFd(), "331 :Channel " + chan + " has no topic.\r\n");
 			return ;
 		}
 	}
 
 	if (!channel->isMember(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".");
+		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".\r\n");
 		return ;
 	}
 	
 	if (channel->getTopicOnlyOperator() && !channel->isOperator(main.getFd()))
 	{
-		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.");
+		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.\r\n");
 		return ;
 	}
 	
