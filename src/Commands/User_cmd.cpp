@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../includes/Commands/User_cmd.hpp"
+#include "../../includes/Server.hpp"
 
 User_cmd::User_cmd() {}
 

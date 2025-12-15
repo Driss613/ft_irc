@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/10 09:57:13 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/08 10:27:36 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,7 +306,7 @@ Channel *Server::createChannel(const std::string &name)
 {
 	_channels.push_back(Channel(name));
 	_channels.back().setInviteOnly(false);
-	_channels.back().setTopic("No topic is set");
+	_channels.back().setTopic("");
 	return &_channels[_channels.size() - 1];
 }
 

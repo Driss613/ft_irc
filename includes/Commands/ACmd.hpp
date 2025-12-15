@@ -16,13 +16,12 @@
 #include "../Server.hpp"
 
 class Server;
+class Client;
 
-class ACmd
-{
-private:
-public:
-	ACmd();
-	virtual ~ACmd();
-	virtual void parsing(std::string str, Server &serv, Client &main) = 0;
-	std::vector<std::string> buildVector(std::string str);
+class ACmd {
+	public:
+		ACmd();
+		virtual ~ACmd();
+		virtual void parsing(std::string str, Server &serv, Client &main) = 0;
+		std::vector<std::string> buildVector(std::string str);
 };

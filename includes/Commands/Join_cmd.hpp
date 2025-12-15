@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:37:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 11:37:38 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 14:11:00 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include "ACmd.hpp"
 
 class Join_cmd : public ACmd {
-	private:
-	
 	public:
 		Join_cmd();
 		~Join_cmd();

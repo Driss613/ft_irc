@@ -11,36 +11,38 @@
 /* ************************************************************************** */
 
 #pragma once
+
 #include <string>
 #include <vector>
 #include "Channel.hpp"
 
+class Channel;
+
 class Client
 {
-private:
-	std::string _ip;
-	int _fd;
-	int _rank;
-	std::string username;
-	std::string nickname;
-	std::vector<Channel> _channels;
-
-public:
-	Client();
-	Client(const Client &cpy);
-	~Client();
-	Client &operator=(const Client &rhs);
-
-	const std::string &getIp(void) const;
-	int getFd(void) const;
-	std::string getUsername(void) const;
-	std::string getNickname(void) const;
-	int getRank() const;
-	std::vector<Channel> getChannels() const;
-
-	void setIp(const std::string &ip);
-	void setFd(int fd);
-	void setNickname(std::string str);
-	void setUsername(std::string str);
-	void setRank(int rank);
+	private :
+		std::string _ip;
+		int _fd;
+		int _rank;
+		std::string username;
+		std::string nickname;
+		std::vector<Channel> _channels;
+	public :
+		Client();
+		Client(const Client& cpy);
+		~Client();
+		Client& operator=(const Client& rhs);
+		
+		const std::string&	getIp(void) const;
+		int					getFd(void) const;
+		std::string			getUsername(void) const;
+		std::string			getNickname(void) const;
+		int					getRank() const;
+		std::vector<Channel> getChannels() const;
+		
+		void				setIp(const std::string& ip);
+		void				setFd(int fd);
+		void				setNickname(std::string str);
+		void				setUsername(std::string str);
+		void				setRank(int rank);
 };

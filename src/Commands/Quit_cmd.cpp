@@ -6,18 +6,18 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 13:21:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/12 11:35:26 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/10/14 15:01:11 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands/Quit_cmd.hpp"
+#include "../../includes/Server.hpp"
 
 Quit_cmd::Quit_cmd() {}
 
 Quit_cmd::~Quit_cmd() {}
 
-void Quit_cmd::parsing(std::string str, Server &serv, Client &main)
-{
+void Quit_cmd::parsing(std::string str, Server &serv, Client &main) {
 	Client &client = serv.getFd(main.getFd());
 	std::string message = str;
 

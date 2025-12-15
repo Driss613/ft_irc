@@ -3,20 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:13 by lisambet          #+#    #+#             */
-/*   Updated: 2025/12/08 14:11:44 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/10 12:01:07 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CHANNEL_HPP
-#define CHANNEL_HPP
+#pragma once
 
 #include <string>
 #include <vector>
-#include "Channel.hpp"
-class Client;    
+#include "Client.hpp"
+#include "Server.hpp"
+
+class Client;
+
 class Channel
 {
 private:
@@ -65,5 +67,3 @@ public:
 	bool hasKey() const;
 	void removeKey();
 };
-
-#endif

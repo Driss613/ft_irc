@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:43:41 by drabarza          #+#    #+#             */
-/*   Updated: 2025/09/16 14:38:04 by prosset          ###   ########.fr       */
+/*   Updated: 2025/10/15 14:45:38 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int main(int ac, char **av)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 		return 1;
 	}
 
@@ -36,8 +36,6 @@ int main(int ac, char **av)
 
 	std::string passwd = av[2];
 	server.setpasswd(passwd);
-
-	// std::cout << "password = " << server.getpasswd() << std::endl;
 	
 	std::cout << "Opening the server" << std::endl;
 	try
@@ -48,7 +46,7 @@ int main(int ac, char **av)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 		server.closeFds();
 	}
 	std::cout << "Closing the server" << std::endl;

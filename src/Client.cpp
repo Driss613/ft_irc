@@ -66,7 +66,7 @@ std::vector<Channel> Client::getChannels() const {
 	return _channels;
 }
 
-void Client::setIp(const std::string &ip)
+void	Client::setIp(const std::string& ip)
 {
 	_ip = ip;
 }

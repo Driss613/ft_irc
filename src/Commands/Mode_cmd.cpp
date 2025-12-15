@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../includes/Commands/Mode_cmd.hpp"
+#include "../../includes/Server.hpp"
 
 Mode_cmd::Mode_cmd() {}
 
@@ -104,9 +105,9 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 					serv.sendMessageToClient(main.getFd(), "441 :User " + param + " is not on the channel.\r\n");
 					return ;
 				}
-				if (mod[0] == '+')
+				if (mod[0] == '+' && !channel->isOperator(client->getFd()))
 					channel->addOperator(client->getFd());
-				else
+				else if (mod[0] == '-' && channel->isOperator(client->getFd()))
 					channel->removeOperator(client->getFd());
 			}
 			break;

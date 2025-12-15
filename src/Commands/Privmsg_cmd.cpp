@@ -6,11 +6,12 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:51 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 13:57:23 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/10 13:35:29 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands/Privmsg_cmd.hpp"
+#include "../../includes/Server.hpp"
 
 Privmsg_cmd::Privmsg_cmd() {}
 
@@ -94,5 +95,4 @@ if (str.empty())
 		if (!found)
 			serv.sendMessageToClient(sender, "401 " + target + " :No such nick/channel\r\n");
 	}
-	
 }

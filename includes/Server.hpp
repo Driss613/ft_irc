@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/08 14:04:29 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/10 12:01:51 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "./Commands/ACmd.hpp"
+
+class Client;
+class Channel;
 
 class Server
 {

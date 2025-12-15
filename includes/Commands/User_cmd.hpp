@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:38:41 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/03 11:38:58 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/04 14:11:29 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include "ACmd.hpp"
 
 class User_cmd : public ACmd {
-	private:
-	
 	public:
 		User_cmd();
 		~User_cmd();
