@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
+#include "../includes/Client.hpp"
 
-Channel::Channel(const std::string &name) : _name(name), _topic("") {}
+Channel::Channel(const std::string &name) : _name(name), _topic(""), _limit(0), _inviteOnly(0), _topicOnlyOperator(0) {}
 
 Channel::~Channel() {}
 

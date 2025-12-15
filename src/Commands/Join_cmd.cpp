@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Join_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:54:26 by prosset           #+#    #+#             */
 /*   Updated: 2025/12/04 13:57:28 by prosset          ###   ########.fr       */
@@ -14,7 +14,7 @@
 #include "../../includes/Server.hpp"
 
 Join_cmd::Join_cmd() {}
-		
+
 Join_cmd::~Join_cmd() {}
 
 void Join_cmd::parsing(std::string str, Server &serv, Client &main)
@@ -30,7 +30,7 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 		 
 	if (chanList.empty())
 	{
-		std::cerr << "Error : need more params." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "461 " + main.getNickname() + " JOIN :Not enough parameters\r\n");
 		return;
 	}
 	
@@ -106,7 +106,7 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 
 		if (!chan->getTopic().empty())
 			serv.sendMessageToClient(main.getFd(),
-									 "332 " + main.getNickname() + " " + channel + " :" + chan->getTopic() + "\r\n");
+									 "332 " + main.getNickname() + " " + channel + " :No topic is set\r\n");
 
 		std::string namesList;
 		for (size_t j = 0; j < members.size(); j++)

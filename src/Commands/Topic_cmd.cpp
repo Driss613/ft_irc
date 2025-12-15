@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Topic_cmd.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
 /*   Updated: 2025/12/10 13:10:55 by prosset          ###   ########.fr       */

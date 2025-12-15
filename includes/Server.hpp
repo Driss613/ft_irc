@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
 /*   Updated: 2025/12/10 12:01:51 by prosset          ###   ########.fr       */
@@ -33,44 +33,44 @@ class Channel;
 
 class Server
 {
-	private :
-		const int _port;
-		int _serverSocketFd;
-		static bool _signal;
-		std::vector<Client> _clients;
-		std::vector<struct pollfd> _fds;
-		std::string password;
-		std::vector<Channel> _channels;
-	public :
-		Server(const int port = 4444);
-		Server(const Server& cpy);
-		~Server();
-		Server& operator=(const Server& rhs);
-		void serverInit(void);
-		void setupSocket(void);
+private:
+	const int _port;
+	int _serverSocketFd;
+	static bool _signal;
+	std::vector<Client> _clients;
+	std::vector<struct pollfd> _fds;
+	std::string password;
+	std::vector<Channel> _channels;
 
-		static void signalHandler(int signum);
-		void closeFds(void);
-		void removeClient(int fd);
+public:
+	Server(const int port = 4444);
+	Server(const Server &cpy);
+	~Server();
+	Server &operator=(const Server &rhs);
+	void serverInit(void);
+	void setupSocket(void);
 
-		void newClient(void);
-		void newData(int fd);
+	static void signalHandler(int signum);
+	void closeFds(void);
+	void removeClient(int fd);
 
-		void setpasswd(std::string passwd);
-		std::string getpasswd(void) const;
+	void newClient(void);
+	void newData(int fd);
 
-		Client &getFd(int fd);
-		const Client &getFd(int fd) const;
+	void setpasswd(std::string passwd);
+	std::string getpasswd(void) const;
 
-		std::vector<Client> &getClients();
-		const std::vector<Client> &getClients() const;
+	Client &getFd(int fd);
+	const Client &getFd(int fd) const;
 
-		void parsing(std::string str, int fd);
+	std::vector<Client> &getClients();
+	const std::vector<Client> &getClients() const;
 
-		void sendMessageToClient(Client &client, const std::string &message);
-		void sendMessageToClient(int fd, const std::string &message);
-		
-		Channel *getChannel(const std::string &name);
-		void addClientToChannel(const std::string &channelName, int fd);
-		Channel *createChannel(const std::string &name);
+	void parsing(std::string str, int fd);
+
+	void sendMessageToClient(Client &client, const std::string &message);
+	void sendMessageToClient(int fd, const std::string &message);
+	Channel *getChannel(const std::string &name);
+	void addClientToChannel(const std::string &channelName, int fd);
+	Channel *createChannel(const std::string &name);
 };

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Invite_cmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:00:34 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/10 13:36:44 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/09 13:59:26 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands/Invite_cmd.hpp"
 
 Invite_cmd::Invite_cmd() {}
-		
+
 Invite_cmd::~Invite_cmd() {}
 
 void Invite_cmd::parsing(std::string str, Server &serv, Client &main)

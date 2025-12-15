@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Pass_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:06:49 by prosset           #+#    #+#             */
 /*   Updated: 2025/12/10 13:43:28 by prosset          ###   ########.fr       */
@@ -14,7 +14,7 @@
 #include "../../includes/Server.hpp"
 
 Pass_cmd::Pass_cmd() {}
-		
+
 Pass_cmd::~Pass_cmd() {}
 
 void Pass_cmd::parsing(std::string str, Server &serv, Client &main)

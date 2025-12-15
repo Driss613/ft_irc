@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/10 13:43:23 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/09 14:10:02 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/Server.hpp"
 
 User_cmd::User_cmd() {}
-		
+
 User_cmd::~User_cmd() {}
 
 void User_cmd::parsing(std::string str, Server &serv, Client &main)
@@ -29,7 +29,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 
 	if (args[3].empty())
 	{
-		std::cerr << "Error : need more parameters." << std::endl;
+		serv.sendMessageToClient(main.getFd(), "461 USER :Need more parameters.\r\n");
 		return ;
 	}
 	
@@ -38,7 +38,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		if (args[0] == clients[i].getUsername())
 		{
-			std::cerr << "Error : username unavailable." << std::endl;
+			serv.sendMessageToClient(main.getFd(), "433 :Username unavailable.\r\n");
 			return ;
 		}
 	}
@@ -47,7 +47,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		if (args[1][i] < '0' || args[1][i] > '9')
 		{
-			std::cerr << "Error : usermod should be a numeric." << std::endl;
+			serv.sendMessageToClient(main.getFd(), "501 :Usermod should be a numeric.\r\n");
 			return ;
 		}
 	}

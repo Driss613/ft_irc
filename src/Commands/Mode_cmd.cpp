@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/10 13:20:23 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/09 14:04:14 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/Server.hpp"
 
 Mode_cmd::Mode_cmd() {}
-		
+
 Mode_cmd::~Mode_cmd() {}
 
 void Mode_cmd::parsing(std::string str, Server &serv, Client &main)

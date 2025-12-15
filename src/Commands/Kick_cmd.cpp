@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Kick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
 /*   Updated: 2025/12/12 11:21:32 by prosset          ###   ########.fr       */

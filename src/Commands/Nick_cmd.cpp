@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:51:40 by prosset           #+#    #+#             */
 /*   Updated: 2025/12/12 11:18:19 by prosset          ###   ########.fr       */
@@ -14,7 +14,7 @@
 #include "../../includes/Server.hpp"
 
 Nick_cmd::Nick_cmd() {}
-		
+
 Nick_cmd::~Nick_cmd() {}
 
 static bool isdigit(std::string::iterator it)
@@ -46,7 +46,6 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 			return;	
 		}
 	}
-
 	if (str.size() > 9)
 	{
 		serv.sendMessageToClient(main.getFd(), "432 :Please enter a nickname of maximum 9 characters.\r\n");
