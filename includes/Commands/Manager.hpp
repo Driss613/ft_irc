@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Manager.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:49:29 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/10 09:56:38 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/15 14:28:09 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Manager {
 		Manager();
 		~Manager();
 
-		ACmd *makeCmd(std::string name, Client *Client, std::string *args, Server &serv);
+		ACmd *makeCmd(std::string name, Client *Client, Server &serv);
 
 		ACmd *makePass();
 		ACmd *makeNick();

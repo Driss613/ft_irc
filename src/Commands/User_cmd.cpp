@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 14:10:02 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:33:03 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,7 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	main.setRank(3);
 	serv.sendMessageToClient(
 		main,
-		":irc.example.com " + main.getNickname() + " :USER command received, waiting for PASS command\r\n");
+		":irc.example.com 001 " + main.getNickname() +
+				" :Welcome to the Internet Relay Network " +
+				main.getNickname() + "!" + main.getUsername() + "@" + main.getIp() + "\r\n");
 }

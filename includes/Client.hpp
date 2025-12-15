@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/06 14:07:55 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/15 14:37:32 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,7 @@ class Client
 		void				setNickname(std::string str);
 		void				setUsername(std::string str);
 		void				setRank(int rank);
+
+		void				joinChannel(Channel &chan);
+		void				removeChannel(Channel &chan);
 };

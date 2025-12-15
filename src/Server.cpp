@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/08 10:27:36 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/15 14:28:37 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,9 @@ void Server::parsing(std::string str, int fd)
 	}
 
 	Manager manager;
-	ACmd *com = manager.makeCmd(cmd, mainClient, &args, *this);
+	ACmd *com = manager.makeCmd(cmd, mainClient, *this);
+
+	std::cout << "args = " << args << std::endl;
 
 	if (com)
 	{
@@ -310,10 +312,11 @@ Channel *Server::createChannel(const std::string &name)
 	return &_channels[_channels.size() - 1];
 }
 
-void Server::addClientToChannel(const std::string &channelName, int fd)
+void Server::addClientToChannel(const std::string &channelName, int fd, Client &main)
 {
 	Channel *chan = getChannel(channelName);
 	if (!chan)
 		chan = createChannel(channelName);
 	chan->addMember(fd);
+	main.joinChannel(*chan);
 }
