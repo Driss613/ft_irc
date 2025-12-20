@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:23 by lisambet          #+#    #+#             */
-/*   Updated: 2025/12/10 12:00:32 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/20 14:38:53 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,11 @@ bool Channel::isOperator(int fd) const
 			return true;
 	}
 	return false;
+}
+
+const std::vector<int> &Channel::getOperators() const
+{
+	return _operators;
 }
 
 Client *Channel::findMember(const std::string &nickname, const std::vector<Client *> &clients)

@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:54:26 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/04 13:57:28 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/20 14:20:38 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,25 @@ Join_cmd::Join_cmd() {}
 Join_cmd::~Join_cmd() {}
 
 void Join_cmd::parsing(std::string str, Server &serv, Client &main)
-{	
+{
 	std::istringstream iss(str);
 	std::string chanList;
 	std::string keyList;
-	
+
 	iss >> chanList;
 	std::getline(iss, keyList);
 	if (!keyList.empty() && keyList[0] == ' ')
-	 	keyList.erase(0, 1);
-		 
+		keyList.erase(0, 1);
+
 	if (chanList.empty())
 	{
 		serv.sendMessageToClient(main.getFd(), "461 " + main.getNickname() + " JOIN :Not enough parameters\r\n");
 		return;
 	}
-	
+
 	std::vector<std::string> chans = buildVector(chanList);
 	std::vector<std::string> keys = buildVector(keyList);
-	
+
 	for (size_t i = 0; i < chans.size(); i++)
 	{
 		std::string channel = chans[i];
@@ -55,13 +55,13 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 									 "476 " + channel + " :Bad Channel Mask\r\n");
 			continue;
 		}
-		
+
 		Channel *chan = serv.getChannel(channel);
 		bool isNewChannel = (chan == NULL);
 
 		if (isNewChannel)
 			chan = serv.createChannel(channel);
-			
+
 		if (chan->isMember(main.getFd()))
 			continue;
 
@@ -106,7 +106,10 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 
 		if (!chan->getTopic().empty())
 			serv.sendMessageToClient(main.getFd(),
-									 "332 " + main.getNickname() + " " + channel + " :No topic is set\r\n");
+									 "332 " + main.getNickname() + " " + channel + " :" + chan->getTopic() + "\r\n");
+		else
+			serv.sendMessageToClient(main.getFd(),
+									 "331 " + main.getNickname() + " " + channel + " :No topic is set\r\n");
 
 		std::string namesList;
 		for (size_t j = 0; j < members.size(); j++)

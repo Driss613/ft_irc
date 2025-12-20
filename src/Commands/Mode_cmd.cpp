@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/09 14:04:14 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/20 14:39:04 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,17 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 					serv.sendMessageToClient(main.getFd(), "441 :User " + param + " is not on the channel.\r\n");
 					return ;
 				}
-				if (mod[0] == '+' && !channel->isOperator(client->getFd()))
-					channel->addOperator(client->getFd());
-				else if (mod[0] == '-' && channel->isOperator(client->getFd()))
+				if (mod[0] == '-' && channel->isOperator(client->getFd()))
+				{
+					if (channel->getOperators().size() <= 1)
+					{
+						serv.sendMessageToClient(main.getFd(), "482 :Cannot remove the last operator from the channel\r\n");
+						return ;
+					}
 					channel->removeOperator(client->getFd());
+				}
+				else if (mod[0] == '+' && !channel->isOperator(client->getFd()))
+					channel->addOperator(client->getFd());
 			}
 			break;
 		case 'l':
@@ -120,5 +127,15 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 		default:
 			break;
 	}
-	
+
+	std::string modeMsg = ":" + main.getNickname() + "!" + main.getUsername() + "@" + main.getIp() + " MODE " + chan + " " + mod;
+	if ((mod[1] == 'k' || mod[1] == 'o' || mod[1] == 'l') && !param.empty())
+		modeMsg += " " + param;
+	modeMsg += "\r\n";
+
+	const std::vector<int> &members = channel->getMembers();
+	for (size_t i = 0; i < members.size(); i++)
+	{
+		serv.sendMessageToClient(members[i], modeMsg);
+	}
 }

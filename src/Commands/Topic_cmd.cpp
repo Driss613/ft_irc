@@ -6,7 +6,7 @@
 /*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/10 13:10:55 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/20 14:28:17 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,11 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".");
 		return ;
 	}
-	
+	if (!channel->isMember(main.getFd()))
+	{
+		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".");
+		return ;
+	}
 	if (topic.empty())
 	{
 		if (channel->getTopic().empty())
@@ -42,14 +46,12 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 			serv.sendMessageToClient(main.getFd(), "331 :Channel " + chan + " has no topic.");
 			return ;
 		}
-	}
-
-	if (!channel->isMember(main.getFd()))
-	{
-		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".");
-		return ;
-	}
-	
+		else
+		{
+			serv.sendMessageToClient(main.getFd(), "332 " + main.getNickname() + " " + chan + " :" + channel->getTopic() + "\r\n");
+			return ;
+		}
+	}	
 	if (channel->getTopicOnlyOperator() && !channel->isOperator(main.getFd()))
 	{
 		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.");
