@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:55 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/10 12:01:51 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/15 14:22:04 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,6 @@ public:
 	void sendMessageToClient(Client &client, const std::string &message);
 	void sendMessageToClient(int fd, const std::string &message);
 	Channel *getChannel(const std::string &name);
-	void addClientToChannel(const std::string &channelName, int fd);
+	void addClientToChannel(const std::string &channelName, int fd, Client &main);
 	Channel *createChannel(const std::string &name);
 };

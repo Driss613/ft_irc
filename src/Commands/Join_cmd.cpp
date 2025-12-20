@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Join_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:54:26 by prosset           #+#    #+#             */
 /*   Updated: 2025/12/20 14:20:38 by lisambet         ###   ########.fr       */
@@ -17,8 +17,35 @@ Join_cmd::Join_cmd() {}
 
 Join_cmd::~Join_cmd() {}
 
+static void JOIN_0(Server &serv, Client &main)
+{
+	std::vector<Channel> chans = main.getChannels();
+	for (size_t i = 0; i < chans.size(); i++)
+	{	
+		std::string partMsg = ":" + main.getNickname() + "!" +
+							  main.getUsername() + "@" + main.getIp() + " PART " + chans[i].getName();
+		
+		partMsg += "\r\n";
+
+		const std::vector<int> &members = chans[i].getMembers();
+		for (size_t j = 0; j < members.size(); j++)
+		{
+			serv.sendMessageToClient(members[j], partMsg);
+		}
+
+		chans[i].removeMember(main.getFd());
+		main.removeChannel(chans[i]);
+	}
+}
+
 void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 {
+	if (str == "0")
+	{
+		JOIN_0(serv, main);
+		return ;
+	}
+	
 	std::istringstream iss(str);
 	std::string chanList;
 	std::string keyList;
@@ -90,7 +117,7 @@ void Join_cmd::parsing(std::string str, Server &serv, Client &main)
 			continue;
 		}
 
-		serv.addClientToChannel(channel, main.getFd());
+		serv.addClientToChannel(channel, main.getFd(), main);
 
 		if (chan->getMembers().size() == 1)
 			chan->addOperator(main.getFd());

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Manager.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:51:04 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/08 10:31:44 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/15 14:27:55 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ ACmd *Manager::makePrivmsg() {
 	return com;
 }
 
-ACmd *Manager::makeCmd(std::string name, Client *Client, std::string *args, Server &serv) {
+ACmd *Manager::makeCmd(std::string name, Client *Client, Server &serv) {
 	std::string levels[] = {"PASS", "NICK", "USER", "JOIN", "PART", "TOPIC", "INVITE", "KICK", "QUIT", "MODE", "PRIVMSG"};
 	ACmd* (Manager::* functions[])() = {&Manager::makePass, &Manager::makeNick, &Manager::makeUser, &Manager::makeJoin,
 				&Manager::makePart, &Manager::makeTopic, &Manager::makeInvite, &Manager::makeKick, &Manager::makeQuit, &Manager::makeMode, &Manager::makePrivmsg};
@@ -111,16 +111,6 @@ ACmd *Manager::makeCmd(std::string name, Client *Client, std::string *args, Serv
 	{
 		serv.sendMessageToClient(Client->getFd(), "461 :You are already registered. Please provide one of these commands : JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG.\r\n");
 		return NULL;
-	}
-
-	if (i == 3 && *args == "0")
-	{
-		i = 4;
-		std::vector<Channel> Chans = Client->getChannels();
-		*args = "";
-		for (size_t j = 0; j < Chans.size(); i++)
-			*args += Chans[i].getName() + ",";
-		args->resize(args->size() - 1);
 	}
 	
 	ACmd *com = (this->*functions[i])();

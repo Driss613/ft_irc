@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Mode_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
 /*   Updated: 2025/12/20 14:39:04 by lisambet         ###   ########.fr       */

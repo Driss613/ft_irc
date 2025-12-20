@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 15:24:53 by drabarza          #+#    #+#             */
-/*   Updated: 2025/12/06 14:08:06 by lisambet         ###   ########.fr       */
+/*   Updated: 2025/12/15 14:40:21 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,26 @@ void Client::setUsername(std::string str)
 void Client::setRank(int rank)
 {
 	_rank = rank;
+}
+
+void Client::joinChannel(Channel &chan) 
+{
+	for (size_t i = 0; i < _channels.size(); i++)
+	{
+		if (_channels[i].getName() == chan.getName())
+			return;
+	}
+	_channels.push_back(chan);
+}
+
+void Client::removeChannel(Channel &chan)
+{
+	for (size_t i = 0; i < _channels.size(); i++)
+	{
+		if (_channels[i].getName() == chan.getName())
+		{
+			_channels.erase(_channels.begin() + i);
+			break;
+		}
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Part_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:25 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/10 13:32:06 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/15 14:41:03 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,16 @@ void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 	{
 		Channel *channel = serv.getChannel(chans[i]);
 		if (!channel)
+		{
 			serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chans[i] + ".\r\n");
+			continue;
+		}
 			
 		if (!channel->isMember(main.getFd()))
+		{
 			serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chans[i] + ".\r\n");
+			continue;
+		}
 			
 		std::string partMsg = ":" + main.getNickname() + "!" +
 							  main.getUsername() + "@" + main.getIp() + " PART " + chans[i];
@@ -60,5 +66,6 @@ void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 		}
 
 		channel->removeMember(main.getFd());
+		main.removeChannel(*channel);
 	}
 }

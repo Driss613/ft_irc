@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Privmsg_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:51 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/10 13:35:29 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/15 13:54:02 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ if (str.empty())
 		const std::vector<int> &members = chan->getMembers();
 		for (size_t i = 0; i < members.size(); i++)
 		{
-
 			Client &member = serv.getFd(members[i]);
 			serv.sendMessageToClient(member, msg);
 		}
