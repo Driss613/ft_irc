@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 11:31:13 by lisambet          #+#    #+#             */
-/*   Updated: 2025/12/10 12:01:07 by prosset          ###   ########.fr       */
+/*   Updated: 2025/12/20 14:38:50 by lisambet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ public:
 	void addOperator(int fd);
 	void removeOperator(int fd);
 	bool isOperator(int fd) const;
+	const std::vector<int> &getOperators() const;
 	const std::vector<int> &getMembers() const;
 	const std::string &getName() const;
 	void setTopic(const std::string &topic);
