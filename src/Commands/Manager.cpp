@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:51:04 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/15 14:27:55 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/17 13:24:03 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ ACmd *Manager::makeCmd(std::string name, Client *Client, Server &serv) {
 		return NULL;
 	}
 
-	if (rank == 3 && i < 3)
+	if (rank == 3 && i == 0)
 	{
-		serv.sendMessageToClient(Client->getFd(), "461 :You are already registered. Please provide one of these commands : JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG.\r\n");
+		serv.sendMessageToClient(Client->getFd(), "461 :You are already registered. Please provide one of these commands : NICK, USER, JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG.\r\n");
 		return NULL;
 	}
 	

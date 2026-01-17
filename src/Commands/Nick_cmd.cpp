@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:51:40 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/12 11:18:19 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/17 14:55:50 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,18 @@ void Nick_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 	Client &client = serv.getFd(main.getFd());
 	client.setNickname(str);
-	client.setRank(2);
 
-	serv.sendMessageToClient(
-		client,
-		":irc.example.com " + client.getNickname() + " :NICK command received, waiting for USER command\r\n");
+	if (client.getRank() == 1)
+	{
+		client.setRank(2);
+		serv.sendMessageToClient(
+			client,
+			":irc.example.com " + client.getNickname() + " :NICK command received, waiting for USER command\r\n");
+	}
+	else
+	{
+		serv.sendMessageToClient(
+			client,
+			":irc.example.com " + client.getNickname() + " :Nickname changed\r\n");
+	}
 }

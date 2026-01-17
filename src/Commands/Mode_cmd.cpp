@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/20 14:39:04 by lisambet         ###   ########.fr       */
+/*   Updated: 2026/01/17 14:40:23 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (!param.empty() && param[0] == ' ')
 	 	param.erase(0, 1);
 
-	if (mod.empty() || mod.size() != 2 || (mod[0] != '+' && mod[0] != '-'))
+	if (!mod.empty() && (mod.size() != 2 || (mod[0] != '+' && mod[0] != '-')))
 	{
 		serv.sendMessageToClient(main.getFd(), "472 : wrong mode. Try with i, t, k, o or l.\r\n");
 		return ;
 	}
 
-	if (mods.find(mod[1]) == std::string::npos)
+	if (!mod.empty() && mods.find(mod[1]) == std::string::npos)
 	{
 		serv.sendMessageToClient(main.getFd(), "472 : wrong mode. Try with i, t, k, o or l.\r\n");
 		return ;
 	}
 
-	if ((mod == "+l" || mod[1] == 'k' || mod[1] == 'o') && param.empty())
+	if (!mod.empty() && (mod == "+l" || mod[1] == 'k' || mod[1] == 'o') && param.empty())
 	{
 		serv.sendMessageToClient(main.getFd(), "461 MODE :Need more parameters.\r\n");
 		return ;
@@ -68,6 +68,22 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 		serv.sendMessageToClient(main.getFd(), "442 :You are not on the channel.\r\n");
 		return ;
 	}
+
+	if (mod.empty() && param.empty())
+	{
+		std::string message = ":irc.example.com 324 " + chan;
+		if (!channel->getKey().empty())
+			message += " +k";
+		if (channel->getLimit())
+			message += " +l";
+		if (channel->getTopicOnlyOperator())
+			message += " +t";
+		if (channel->isInviteOnly())
+			message += " +i";
+		serv.sendMessageToClient(main.getFd(), message + "\r\n");
+		return ;
+	}
+	
 	switch (mod[1])
 	{
 		case 'i':

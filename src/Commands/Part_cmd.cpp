@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:25 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/15 14:41:03 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/17 13:35:51 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ void Part_cmd::parsing(std::string str, Server &serv, Client &main)
 	std::getline(iss, message);
 	if (!message.empty() && message[0] == ' ')
 	 	message.erase(0, 1);
+
+	if (message[0] != ':')
+	{
+		std::istringstream iss(message);
+		iss >> message;
+	}
+	else
+		message.erase(0, 1);
 
 	std::vector<std::string> chans = buildVector(chanList);
 

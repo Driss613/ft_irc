@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:01:23 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/12 11:21:32 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/17 13:34:41 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,14 @@ void Kick_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (comment.empty())
 		comment = "Kicked";
 
-		
+	if (comment[0] != ':')
+	{
+		std::istringstream iss(comment);
+		iss >> comment;
+	}
+	else
+		comment.erase(0, 1);
+	
 	if (members.empty())
 	{
 		serv.sendMessageToClient(main.getFd(), "461 KICK :Need more params.\r\n");

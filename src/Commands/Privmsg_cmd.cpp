@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:51 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/15 13:54:02 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/17 13:37:02 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ if (str.empty())
 	std::getline(iss, message);
 	if (!message.empty() && message[0] == ' ')
 	 	message.erase(0, 1);
-	if (!message.empty() && message[0] == ':')
-		message.erase(0, 1);
 	
 	if (message.empty())
 	{
@@ -43,6 +41,14 @@ if (str.empty())
 		serv.sendMessageToClient(client, "412 : No text to send\r\n");
 		return;
 	}
+
+	if (message[0] != ':')
+	{
+		std::istringstream iss(message);
+		iss >> message;
+	}
+	else
+		message.erase(0, 1);
 	
 	std::string nick;
 	size_t pos = std::min(target.find('!'), target.find('@'));

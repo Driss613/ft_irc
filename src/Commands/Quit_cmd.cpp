@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Quit_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lisambet <lisambet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 13:21:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/10/14 15:01:11 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/17 13:39:18 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,12 @@ void Quit_cmd::parsing(std::string str, Server &serv, Client &main) {
 	Client &client = serv.getFd(main.getFd());
 	std::string message = str;
 
-	if (!message.empty() && message[0] == ':')
+	if (message[0] != ':')
+	{
+		std::istringstream iss(message);
+		iss >> message;
+	}
+	else
 		message.erase(0, 1);
 
 	std::string notify = ":" + client.getNickname() + "!" + client.getUsername() + "@server QUIT :" + message + "\r\n";

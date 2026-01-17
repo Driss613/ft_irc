@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:59:55 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/20 14:28:17 by lisambet         ###   ########.fr       */
+/*   Updated: 2026/01/17 13:52:39 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,24 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 	std::istringstream iss(str);
 	std::string chan;
 	std::string topic;
+	bool clear = 0;
 
 	iss >> chan;
 	std::getline(iss, topic);
 	if (!topic.empty() && topic[0] == ' ')
 	 	topic.erase(0, 1);
+
+	if (topic[0] != ':')
+	{
+		std::istringstream iss(topic);
+		iss >> topic;
+	}
+	else
+	{
+		topic.erase(0, 1);
+		if (topic.empty())
+			clear = 1;	
+	}
 
 	Channel *channel = serv.getChannel(chan);
 	if (!channel)
@@ -39,7 +52,12 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 		serv.sendMessageToClient(main.getFd(), "442 :You are not on channel " + chan + ".");
 		return ;
 	}
-	if (topic.empty())
+	if (channel->getTopicOnlyOperator() && !channel->isOperator(main.getFd()))
+	{
+		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.\r\n");
+		return ;
+	}
+	if (topic.empty() && !clear)
 	{
 		if (channel->getTopic().empty())
 		{
@@ -52,11 +70,6 @@ void Topic_cmd::parsing(std::string str, Server &serv, Client &main)
 			return ;
 		}
 	}	
-	if (channel->getTopicOnlyOperator() && !channel->isOperator(main.getFd()))
-	{
-		serv.sendMessageToClient(main.getFd(), "482 :You don't have operator privileges for this channel.\r\n");
-		return ;
-	}
 	
 	channel->setTopic(topic);
 	std::string topicMsg = ":" + main.getNickname() + "!" +

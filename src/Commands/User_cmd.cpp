@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:53:17 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/15 13:33:03 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/17 14:57:47 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	iss >> args[0] >> args[1] >> args[2];
 	std::getline(iss, args[3]);
 	if (!args[3].empty() && args[3][0] == ' ')
+		args[3].erase(0, 1);
+
+	if (args[3][0] != ':')
+	{
+		std::istringstream iss(args[3]);
+		iss >> args[3];
+	}
+	else
 		args[3].erase(0, 1);
 
 	if (args[3].empty())
@@ -53,10 +61,20 @@ void User_cmd::parsing(std::string str, Server &serv, Client &main)
 	}
 
 	main.setUsername(args[0]);
-	main.setRank(3);
-	serv.sendMessageToClient(
-		main,
-		":irc.example.com 001 " + main.getNickname() +
-				" :Welcome to the Internet Relay Network " +
-				main.getNickname() + "!" + main.getUsername() + "@" + main.getIp() + "\r\n");
+
+	if (main.getRank() == 2)
+	{
+		main.setRank(3);
+		serv.sendMessageToClient(
+			main,
+			":irc.example.com 001 " + main.getNickname() +
+					" :Welcome to the Internet Relay Network " +
+					main.getNickname() + "!" + main.getUsername() + "@" + main.getIp() + "\r\n");
+	}
+	else
+	{
+		serv.sendMessageToClient(
+			main,
+			":irc.example.com " + main.getUsername() + " :Username changed\r\n");
+	}
 }
