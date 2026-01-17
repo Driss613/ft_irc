@@ -12,7 +12,6 @@
 
 #include "../../includes/Commands/Mode_cmd.hpp"
 #include "../../includes/Server.hpp"
-#include <sstream>
 
 Mode_cmd::Mode_cmd() {}
 
