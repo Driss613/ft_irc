@@ -169,7 +169,7 @@ void Server::removeClient(int fd)
 
 void Server::newData(int fd)
 {
-	char buffer[1024]; //
+	char buffer[1024];
 	int bytes;
 
 	std::memset(buffer, '\0', sizeof(buffer));
@@ -183,8 +183,36 @@ void Server::newData(int fd)
 	else
 	{
 		buffer[bytes] = '\0';
-		std::cout << "Client " << fd << " Data : " << buffer;
-		parsing(std::string(buffer), fd);
+		
+		Client *client = NULL;
+		for (size_t i = 0; i < _clients.size(); i++)
+		{
+			if (_clients[i].getFd() == fd)
+			{
+				client = &_clients[i];
+				break;
+			}
+		}
+		
+		if (!client)
+			return;
+		
+		client->appendToBuffer(std::string(buffer));
+		std::string& clientBuffer = client->getBufferRef();
+		
+		size_t pos;
+		while ((pos = clientBuffer.find("\r\n")) != std::string::npos || 
+		       (pos = clientBuffer.find("\n")) != std::string::npos)
+		{
+			std::string command = clientBuffer.substr(0, pos);
+			clientBuffer.erase(0, pos + (clientBuffer[pos] == '\r' ? 2 : 1));
+			
+			if (!command.empty())
+			{
+				std::cout << "Client " << fd << " Command: " << command << std::endl;
+				parsing(command, fd);
+			}
+		}
 	}
 }
 

@@ -27,6 +27,7 @@ class Client
 		std::string username;
 		std::string nickname;
 		std::vector<Channel> _channels;
+		std::string _buffer;
 	public :
 		Client();
 		Client(const Client& cpy);
@@ -45,6 +46,11 @@ class Client
 		void				setNickname(std::string str);
 		void				setUsername(std::string str);
 		void				setRank(int rank);
+
+		std::string			getBuffer() const;
+		std::string&		getBufferRef();
+		void				appendToBuffer(const std::string& data);
+		void				clearBuffer();
 
 		void				joinChannel(Channel &chan);
 		void				removeChannel(Channel &chan);

@@ -76,6 +76,26 @@ void Client::setFd(int fd)
 	_fd = fd;
 }
 
+std::string Client::getBuffer() const
+{
+	return _buffer;
+}
+
+std::string& Client::getBufferRef()
+{
+	return _buffer;
+}
+
+void Client::appendToBuffer(const std::string& data)
+{
+	_buffer += data;
+}
+
+void Client::clearBuffer()
+{
+	_buffer.clear();
+}
+
 void Client::setNickname(std::string str)
 {
 	nickname = str;

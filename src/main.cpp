@@ -40,8 +40,9 @@ int main(int ac, char **av)
 	std::cout << "Opening the server" << std::endl;
 	try
 	{
-		signal(SIGINT, Server::signalHandler);
-		signal(SIGQUIT, Server::signalHandler);
+			   signal(SIGINT, Server::signalHandler);
+			   signal(SIGQUIT, Server::signalHandler);
+			   signal(SIGTSTP, Server::signalHandler);
 		server.serverInit();
 	}
 	catch(const std::exception& e)

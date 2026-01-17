@@ -12,6 +12,7 @@
 
 #include "../../includes/Commands/Mode_cmd.hpp"
 #include "../../includes/Server.hpp"
+#include <sstream>
 
 Mode_cmd::Mode_cmd() {}
 
@@ -32,7 +33,41 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (!param.empty() && param[0] == ' ')
 	 	param.erase(0, 1);
 
-	if (!mod.empty() && (mod.size() != 2 || (mod[0] != '+' && mod[0] != '-')))
+	Channel *channel = serv.getChannel(chan);
+	if (!channel)
+	{
+		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".\r\n");
+		return ;
+	}
+
+	if (mod.empty())
+	{
+		std::string modeStr = "+";
+		std::string params = "";
+		
+		if (channel->isInviteOnly())
+			modeStr += "i";
+		if (channel->getTopicOnlyOperator())
+			modeStr += "t";
+		if (channel->hasKey())
+		{
+			modeStr += "k";
+			params += " " + channel->getKey();
+		}
+		if (channel->hasLimit())
+		{
+			modeStr += "l";
+			std::ostringstream oss;
+			oss << channel->getLimit();
+			params += " " + oss.str();
+		}
+		
+		std::string response = "324 " + main.getNickname() + " " + chan + " " + modeStr + params + "\r\n";
+		serv.sendMessageToClient(main.getFd(), response);
+		return ;
+	}
+
+	if (mod.size() != 2 || (mod[0] != '+' && mod[0] != '-'))
 	{
 		serv.sendMessageToClient(main.getFd(), "472 : wrong mode. Try with i, t, k, o or l.\r\n");
 		return ;
@@ -47,13 +82,6 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (!mod.empty() && (mod == "+l" || mod[1] == 'k' || mod[1] == 'o') && param.empty())
 	{
 		serv.sendMessageToClient(main.getFd(), "461 MODE :Need more parameters.\r\n");
-		return ;
-	}
-
-	Channel *channel = serv.getChannel(chan);
-	if (!channel)
-	{
-		serv.sendMessageToClient(main.getFd(), "403 :No such channel as " + chan + ".\r\n");
 		return ;
 	}
 
