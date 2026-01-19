@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 15:51:04 by prosset           #+#    #+#             */
-/*   Updated: 2026/01/17 13:24:03 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/19 14:46:25 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ ACmd *Manager::makeCmd(std::string name, Client *Client, Server &serv) {
 
 	if (i == 11)
 	{
-		serv.sendMessageToClient(Client->getFd(), "421 :Please provide one of these commands : PASS, NICK, USER, JOIN, PART, TOPIC, INVITE, KICK, QUIT, MODE or PRIVMSG.\r\n");
+		serv.sendMessageToClient(Client->getFd(), "421 :" + name + " :Unknown command\r\n");
 		return NULL;
 	}
 	

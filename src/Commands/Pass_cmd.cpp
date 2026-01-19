@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:06:49 by prosset           #+#    #+#             */
-/*   Updated: 2025/12/15 13:33:33 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/19 14:49:47 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ void Pass_cmd::parsing(std::string str, Server &serv, Client &main)
 			":irc.example.com :PASS command received, waiting for NICK command\r\n");
 	}
 	else
-		serv.sendMessageToClient(main.getFd(), "464 :Password incorrect.\r\n");
+		serv.sendMessageToClient(main.getFd(), "464 :Password incorrect\r\n");
 }

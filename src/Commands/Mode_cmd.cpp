@@ -6,7 +6,7 @@
 /*   By: prosset <prosset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 12:02:00 by prosset           #+#    #+#             */
-/*   Updated: 2026/01/17 14:40:23 by prosset          ###   ########.fr       */
+/*   Updated: 2026/01/19 13:49:31 by prosset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,21 +93,6 @@ void Mode_cmd::parsing(std::string str, Server &serv, Client &main)
 	if (!channel->isMember(main.getFd()))
 	{
 		serv.sendMessageToClient(main.getFd(), "442 :You are not on the channel.\r\n");
-		return ;
-	}
-
-	if (mod.empty() && param.empty())
-	{
-		std::string message = ":irc.example.com 324 " + chan;
-		if (!channel->getKey().empty())
-			message += " +k";
-		if (channel->getLimit())
-			message += " +l";
-		if (channel->getTopicOnlyOperator())
-			message += " +t";
-		if (channel->isInviteOnly())
-			message += " +i";
-		serv.sendMessageToClient(main.getFd(), message + "\r\n");
 		return ;
 	}
 	
